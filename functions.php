@@ -14,6 +14,7 @@ require_once TEMPLATEPATH . '/includes/QL_Email.php';
 require_once TEMPLATEPATH . '/includes/admin.php';
 require_once TEMPLATEPATH . '/includes/personalization.php';
 require_once TEMPLATEPATH . '/includes/campaign.php';
+require_once TEMPLATEPATH . '/includes/custom-controls.php';
 
 // include mail chimp
 require_once TEMPLATEPATH.'/plugins/mailchimp-widget/mailchimp-widget.php';
@@ -23,15 +24,35 @@ require_once TEMPLATEPATH.'/plugins/mailchimp-widget/mailchimp-widget.php';
 define('QL_BACKGROUND_COLOR', '#FFFFFF');
 define('QL_TITLE_TAGLINE_FONT', 'Times New Roman');
 define('QL_TITLE_TAGLINE_TITLE_COLOR', '#000000');
+
+define('QL_TITLE_TAGLINE_TITLE_COLORINFO', '#000000');
+
+
+
 define('QL_LAYOUT_PADDING', '30');
 define('QL_LAYOUT_ROUNDNESS', '25');
 define('QL_LAYOUT_BOX_SHADOW', '10');
 define('QL_LAYOUT_POSITION', 'center');
+define('QL_CONTENT_POSTITLEINFO', 'center');
+define('QL_TITLE_TAGLINE_FONTINFO', 'Times New Roman');
+
+
+
+define('QL_TITLE_TAGLINE_TEXTALIGN', 'center');
+define('QL_CONTENT_POSTITLE', 'center');
+
+define('QL_CONTENT_POSITIONTEXT', 'center');
+
 define('QL_FOOTER_CONTENT', 'Copyright &copy; '.date('Y').' '.get_bloginfo());
 define('QL_WIDGETS_EMAIL_SUBMIT_COLOR', 'gray');
 define('QL_CONTENT_CONTENT', 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.');
 define('QL_CONTENT_OPACITY', '100');
 define('QL_CONTENT_COLOR', '#000000');
+define('QL_CONTENT_CONTENTFONT', 'Times New Roman');
+
+define('QL_TITLE_BOTTOM_MARGIN', 0);
+define('QL_HEADER_BOTTOM_MARGIN', 18);
+define('QL_CONTENT_LINE_SPACING', 20);
 
 // Setup the database
 $db_setup = <<<DB_SETUP
@@ -244,11 +265,14 @@ add_action('admin_footer', 'ql_admin_footer');
 
 // include jquery ui
 function ql_admin_scripts(){
-	wp_enqueue_script('jquery-ui-core');
+	
+    wp_enqueue_script('jquery-ui-core');
 	wp_enqueue_script('jquery-ui');
 	wp_enqueue_script('jquery-ui-slider');
+
 }
 add_action('admin_enqueue_scripts', 'ql_admin_scripts');
+
 // include jquery ui
 function ql_ffscripts(){
 	wp_enqueue_script('jquery-ui-core');
@@ -467,33 +491,165 @@ function ql_customize_register( $wp_customize ){
 	/**
 	 * Additional title controls
 	 */
-	
+
+       
+
+
+
+
 	// Heading font family
 	$wp_customize->add_setting( 'ql_title_tagline[font]', array(
-		'default'		=> '',
+		'default'		=> 'QL_TITLE_TAGLINE_FONT',
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
 	));
-	$wp_customize->add_control( 'ql_title_tagline', array(
+	$wp_customize->add_control( 'ql_title_tagline[font]', array(
 		'label'			=> 'Title Font',
 		'section'		=> 'title_tagline',
 		'settings'		=> 'ql_title_tagline[font]',
 		'type'			=> 'select',
 		'choices'		=> array(
-			''						=> '-None-',
-			'Abril Fatface'			=> 'Abril Fatface',
-			'Droid Sans'			=> 'Droid Sans',
-			'Droid Serif'			=> 'Droid Serif',
-			'Droid Sans Mono'		=> 'Droid Sans Mono',
-			'Hammersmith One'		=> 'Hammersmith One',
-			'Lato'					=> 'Lato',
-			'Playfair Display'		=> 'Playfair Display',
-			'Ubuntu'				=> 'Ubuntu',
+			''			=> '-None-',
+			'Abel'			=> 'Abel',
+			'Abril Fatface'		=> 'Abril Fatface',
+			'Actor'			=> 'Actor',
+			'Aldrich'		=> 'Aldrich',
+			'Alegreya SC'		=> 'Alegreya SC',
+			'Alice'			=> 'Alice',
+			'Anaheim'		=> 'Anaheim',
+			'Asul'			=> 'Asul',
+			'BenchNine'		=> 'BenchNine',
+			'Bigelow Rules'		=> 'Bigelow Rules',
+			'Bilbo Swash Caps'	=> 'Bilbo Swash Caps',
+			'Bubbler One'		=> 'Bubbler One',
+			'Cabin'			=> 'Cabin',
+			'Carrois Gothic'	=> 'Carrois Gothic',
+			'Chela One'		=> 'Chela One',
+			'Cherry Cream Soda'	=> 'Cherry Cream Soda',
+			'Coda'			=> 'Coda',
+			'Cousine'		=> 'Cousine',
+			'Ceviche One'		=> 'Ceviche One',
+			'Chewy'			=> 'Chewy',
+			'Creepster'		=> 'Creepster',
+			'Crushed'		=> 'Crushed',
+			'Droid Sans'		=> 'Droid Sans',
+			'Droid Serif'		=> 'Droid Serif',
+			'Droid Sans Mono'	=> 'Droid Sans Mono',
+			'Eagle Lake'		=> 'Eagle Lake',
+			'Electrolize'		=> 'Electrolize',
+                        'Faster One'		=> 'Faster One',
+			'Fenix'			=> 'Fenix',
+			'Flavors'		=> 'Flavors',
+			'Francois One'		=> 'Francois One',
+			'Finger Paint'		=> 'Finger Paint',
+			'Freckle Face'		=> 'Freckle Face',
+			'Fredoka One'		=> 'Fredoka One',
+			'Geo'			=> 'Geo',
+			'Germania One'		=> 'Germania One',
+			'Goblin One'		=> 'Goblin One',
+			'Gilda Display'		=> 'Gilda Display',
+			'Give You Glory'	=> 'Give You Glory',
+			'Glass Antiqua'		=> 'Glass Antiqua',
+			'Happy Monkey'		=> 'Happy Monkey',
+			'Hammersmith One'	=> 'Hammersmith One',
+			'Hanalei'		=> 'Hanalei',
+			'Holtwood One SC'	=> 'Holtwood One SC',
+			'IM Fell Great Primer SC'	=> 'IM Fell Great Primer SC',
+			'Inika'			=> 'Inika',
+			'Istok Web'		=> 'Istok Web',
+			'Josefin Sans'		=> 'Josefin Sans',
+			'Josefin Slab'		=> 'Josefin Slab',
+			'Judson'		=> 'Judson',
+			'Maiden Orange'		=> 'Maiden Orange',
+			'Marck Script'		=> 'Marck Script',
+			'Medula One'		=> 'Medula One',
+			'Merriweather Sans'	=> 'Merriweather Sans',
+			'Merienda One'		=> 'Merienda One',
+			'Metrophobic'		=> 'Metrophobic',
+			'Montserrat Alternates'	=> 'Montserrat Alternates',
+			'Montserrat Subrayada'	=> 'Montserrat Subrayada',
+                        'Mouse Memoirs'		=> 'Mouse Memoirs',
+			'News Cycle'		=> 'News Cycle',
+			'New Rocker'		=> 'New Rocker',
+			'Nothing You Could Do'	=> 'Nothing You Could Do',
+			'Kavoon'		=> 'Kavoon',
+			'Kenia'			=> 'Kenia',
+			'Knewave'		=> 'Knewave',
+                        'Lato'			=> 'Lato',
+			'Limelight'		=> 'Limelight',
+			'Londrina Sketch'	=> 'Londrina Sketch',
+			'Luckiest Guy'		=> 'Luckiest Guy',
+			'Oleo Script'		=> 'Oleo Script',
+			'Ovo'			=> 'Ovo',
+			'Oxygen'		=> 'Oxygen',
+			'Pathway Gothic One'	=> 'Pathway Gothic One',
+			'Poller One'		=> 'Poller One',
+			'Poly'			=> 'Poly',
+			'Port Lligat Slab'	=> 'Port Lligat Slab',
+			'Port Lligat Sans'	=> 'Port Lligat Sans',
+			'Playball'		=> 'Playball',
+			'Playfair Display'	=> 'Playfair Display',
+			'Quattrocento'		=> 'Quattrocento',
+			'Quintessential'	=> 'Quintessential',
+			'Qwigley'		=> 'Qwigley',
+			'Rancho'		=> 'Rancho',
+			'Revalia'		=> 'Revalia',
+                        'Roboto'		=> 'Roboto',
+			'Ropa Sans'		=> 'Ropa Sans',
+			'Rosario'		=> 'Rosario',
+			'Rouge Script'		=> 'Rouge Script',
+			'Risque'		=> 'Risque',
+			'Rufina'		=> 'Rufina',
+			'Tangerine'		=> 'Tangerine',
+			'Trochut'		=> 'Trochut',
+                        'Trykker'		=> 'Trykker',
+                        'The Girl Next Door'	=> 'The Girl Next Door',
+			'Shadows Into Light'	=> 'Shadows Into Light',
+			'Scada'			=> 'Scada',
+			'Sunshiney'		=> 'Sunshiney',
+			'Ubuntu'		=> 'Ubuntu',
+			'Underdog'		=> 'Underdog',
 			'UnifrakturMaguntia'	=> 'UnifrakturMaguntia',
-			'Vollkorn'				=> 'Vollkorn',
-		),
+			'Unkempt'		=> 'Unkempt',
+			'UnifrakturMaguntia'	=> 'UnifrakturMaguntia',
+			'Wallpoet'		=> 'Wallpoet',
+			'Varela'		=> 'Varela',
+			'Vollkorn'		=> 'Vollkorn',
+                        'Yeseva One'		=> 'Yeseva One',
+		
+
+
+),
 	));
 	
+
+
+	
+ // Position
+	$wp_customize->add_setting( 'ql_title_tagline[postitle]', array(
+		'default'		=> QL_CONTENT_POSTITLE,
+		'type'			=> 'option',
+		'transport'		=> 'postMessage'
+	));
+	$wp_customize->add_control( 'ql_title_tagline[postitle]', array(
+		'label'			=> 'Position Title',
+		'section'		=> 'title_tagline',
+		'settings'		=> 'ql_title_tagline[postitle]',
+		'type'			=> 'radio',
+		'choices'		=> array(
+			'left'=>'Left',
+			'center'=>'Center',
+			'right'=>'Right',
+                        'justify'=>'justify',
+		),
+	));
+        
+
+
+
+
+
+
 	// Heading text color
 	$wp_customize->add_setting( 'ql_title_tagline[title_color]', array(
 		'default'		=> QL_TITLE_TAGLINE_TITLE_COLOR,
@@ -508,7 +664,207 @@ function ql_customize_register( $wp_customize ){
 			'settings'		=> 'ql_title_tagline[title_color]',
 		))
 	);
+
+    // Title bottom margin
+    $wp_customize->add_setting('ql_title_tagline[title_margin]', array(
+        'default'       => QL_TITLE_BOTTOM_MARGIN,
+        'transport'     => 'postMessage',
+        'type'          => 'option'
+    ));
+
+    $wp_customize->add_control(new QL_Slider_Control($wp_customize, 'ql_title_bottom_margin', array(
+            'label'     => 'Title Bottom Margin',
+            'section'   => 'title_tagline',
+            'settings'  => 'ql_title_tagline[title_margin]',
+            'min'       => 0,
+            'max'       => 100,
+            'step'      => 1
+        ))
+    );
 	
+
+// Heading font family
+	$wp_customize->add_setting( 'ql_title_tagline[fontinfo]', array(
+		'default'		=> 'QL_TITLE_TAGLINE_FONTINFO',
+		'type'			=> 'option',
+		'capability'	=> 'edit_theme_options',
+	));
+	$wp_customize->add_control( 'ql_title_tagline[fontinfo]', array(
+		'label'			=> 'Tagline Font',
+		'section'		=> 'title_tagline',
+		'settings'		=> 'ql_title_tagline[fontinfo]',
+		'type'			=> 'select',
+		'choices'		=> array(
+			''			=> '-None-',
+			'Abel'			=> 'Abel',
+			'Abril Fatface'		=> 'Abril Fatface',
+			'Actor'			=> 'Actor',
+			'Aldrich'		=> 'Aldrich',
+			'Alegreya SC'		=> 'Alegreya SC',
+			'Alice'			=> 'Alice',
+			'Anaheim'		=> 'Anaheim',
+			'Asul'			=> 'Asul',
+			'BenchNine'		=> 'BenchNine',
+			'Bigelow Rules'		=> 'Bigelow Rules',
+			'Bilbo Swash Caps'	=> 'Bilbo Swash Caps',
+			'Bubbler One'		=> 'Bubbler One',
+			'Cabin'			=> 'Cabin',
+			'Carrois Gothic'	=> 'Carrois Gothic',
+			'Chela One'		=> 'Chela One',
+			'Cherry Cream Soda'	=> 'Cherry Cream Soda',
+			'Coda'			=> 'Coda',
+			'Cousine'		=> 'Cousine',
+			'Ceviche One'		=> 'Ceviche One',
+			'Chewy'			=> 'Chewy',
+			'Creepster'		=> 'Creepster',
+			'Crushed'		=> 'Crushed',
+			'Droid Sans'		=> 'Droid Sans',
+			'Droid Serif'		=> 'Droid Serif',
+			'Droid Sans Mono'	=> 'Droid Sans Mono',
+			'Eagle Lake'		=> 'Eagle Lake',
+			'Electrolize'		=> 'Electrolize',
+                        'Faster One'		=> 'Faster One',
+			'Fenix'			=> 'Fenix',
+			'Flavors'		=> 'Flavors',
+			'Francois One'		=> 'Francois One',
+			'Finger Paint'		=> 'Finger Paint',
+			'Freckle Face'		=> 'Freckle Face',
+			'Fredoka One'		=> 'Fredoka One',
+			'Geo'			=> 'Geo',
+			'Germania One'		=> 'Germania One',
+			'Goblin One'		=> 'Goblin One',
+			'Gilda Display'		=> 'Gilda Display',
+			'Give You Glory'	=> 'Give You Glory',
+			'Glass Antiqua'		=> 'Glass Antiqua',
+			'Happy Monkey'		=> 'Happy Monkey',
+			'Hammersmith One'	=> 'Hammersmith One',
+			'Hanalei'		=> 'Hanalei',
+			'Holtwood One SC'	=> 'Holtwood One SC',
+			'IM Fell Great Primer SC'	=> 'IM Fell Great Primer SC',
+			'Inika'			=> 'Inika',
+			'Istok Web'		=> 'Istok Web',
+			'Josefin Sans'		=> 'Josefin Sans',
+			'Josefin Slab'		=> 'Josefin Slab',
+			'Judson'		=> 'Judson',
+			'Maiden Orange'		=> 'Maiden Orange',
+			'Marck Script'		=> 'Marck Script',
+			'Medula One'		=> 'Medula One',
+			'Merriweather Sans'	=> 'Merriweather Sans',
+			'Merienda One'		=> 'Merienda One',
+			'Metrophobic'		=> 'Metrophobic',
+			'Montserrat Alternates'	=> 'Montserrat Alternates',
+			'Montserrat Subrayada'	=> 'Montserrat Subrayada',
+                        'Mouse Memoirs'		=> 'Mouse Memoirs',
+			'News Cycle'		=> 'News Cycle',
+			'New Rocker'		=> 'New Rocker',
+			'Nothing You Could Do'	=> 'Nothing You Could Do',
+			'Kavoon'		=> 'Kavoon',
+			'Kenia'			=> 'Kenia',
+			'Knewave'		=> 'Knewave',
+                        'Lato'			=> 'Lato',
+			'Limelight'		=> 'Limelight',
+			'Londrina Sketch'	=> 'Londrina Sketch',
+			'Luckiest Guy'		=> 'Luckiest Guy',
+			'Oleo Script'		=> 'Oleo Script',
+			'Ovo'			=> 'Ovo',
+			'Oxygen'		=> 'Oxygen',
+			'Pathway Gothic One'	=> 'Pathway Gothic One',
+			'Poller One'		=> 'Poller One',
+			'Poly'			=> 'Poly',
+			'Port Lligat Slab'	=> 'Port Lligat Slab',
+			'Port Lligat Sans'	=> 'Port Lligat Sans',
+			'Playball'		=> 'Playball',
+			'Playfair Display'	=> 'Playfair Display',
+			'Quattrocento'		=> 'Quattrocento',
+			'Quintessential'	=> 'Quintessential',
+			'Qwigley'		=> 'Qwigley',
+			'Rancho'		=> 'Rancho',
+			'Revalia'		=> 'Revalia',
+                        'Roboto'		=> 'Roboto',
+			'Ropa Sans'		=> 'Ropa Sans',
+			'Rosario'		=> 'Rosario',
+			'Rouge Script'		=> 'Rouge Script',
+			'Risque'		=> 'Risque',
+			'Rufina'		=> 'Rufina',
+			'Tangerine'		=> 'Tangerine',
+			'Trochut'		=> 'Trochut',
+                        'Trykker'		=> 'Trykker',
+                        'The Girl Next Door'	=> 'The Girl Next Door',
+			'Shadows Into Light'	=> 'Shadows Into Light',
+			'Scada'			=> 'Scada',
+			'Sunshiney'		=> 'Sunshiney',
+			'Ubuntu'		=> 'Ubuntu',
+			'Underdog'		=> 'Underdog',
+			'UnifrakturMaguntia'	=> 'UnifrakturMaguntia',
+			'Unkempt'		=> 'Unkempt',
+			'UnifrakturMaguntia'	=> 'UnifrakturMaguntia',
+			'Wallpoet'		=> 'Wallpoet',
+			'Varela'		=> 'Varela',
+			'Vollkorn'		=> 'Vollkorn',
+                        'Yeseva One'		=> 'Yeseva One',
+		
+
+
+),
+	));
+
+    // Tagline bottom margin (Header bottom margin)
+    $wp_customize->add_setting('ql_title_tagline[header_bottom_margin]', array(
+        'default'       => QL_HEADER_BOTTOM_MARGIN,
+        'transport'     => 'postMessage',
+        'type'          => 'option'
+    ));
+
+    $wp_customize->add_control(new QL_Slider_Control($wp_customize, 'ql_header_bottom_margin', array(
+            'label'     => 'Tagline Bottom Margin',
+            'section'   => 'title_tagline',
+            'settings'  => 'ql_title_tagline[header_bottom_margin]',
+            'min'       => 0,
+            'max'       => 100,
+            'step'      => 1
+        ))
+    );
+
+
+// Position
+	$wp_customize->add_setting( 'ql_title_tagline[postitleinfo]', array(
+		'default'		=> QL_CONTENT_POSTITLEINFO,
+		'type'			=> 'option',
+		'capability'	=> 'edit_theme_options',
+		'transport'		=> 'postMessage',
+	));
+	$wp_customize->add_control( 'ql_title_tagline[postitleinfo]', array(
+		'label'			=> 'Position Tagline',
+		'section'		=> 'title_tagline',
+		'settings'		=> 'ql_title_tagline[postitleinfo]',
+		'type'			=> 'radio',
+		'choices'		=> array(
+			'left'=>'Left',
+			'center'=>'Center',
+			'right'=>'Right',
+                        'justify'=>'justify',
+		),
+	));
+
+       
+        //Tagline text color
+	$wp_customize->add_setting( 'ql_title_tagline[title_colorinfo]', array(
+		'default'		=> QL_TITLE_TAGLINE_TITLE_COLORINFO,
+		'type'			=> 'option',
+		'capability'	=> 'edit_theme_options',
+		'transport'		=> 'postMessage',
+	));
+	$wp_customize->add_control( new WP_Customize_Color_Control( 
+		$wp_customize, 'ql_title_tagline_title_colorinfo', array(
+			'label'			=> 'Tagline Color',
+			'section'		=> 'title_tagline',
+			'settings'		=> 'ql_title_tagline[title_colorinfo]',
+		))
+	);
+
+
+
+
 	// Logo
 	$wp_customize->add_setting( 'ql_title_tagline[logo]', array(
 		'default'		=> '',
@@ -734,6 +1090,12 @@ function ql_customize_register( $wp_customize ){
 		'priority'		=> 11,
 	));
 	
+
+     
+	
+
+
+
 	
 	/**
 	 * Background settings
@@ -772,6 +1134,34 @@ function ql_customize_register( $wp_customize ){
 			'settings'		=> 'ql_background[image]',
 		))
 	);
+
+    // Enable Background Gradient
+    $wp_customize->add_setting('ql_background[gradient]', array(
+        'default'       => false,
+        'type'          => 'option',
+        'transport'     => 'postMessage'
+    ));
+    $wp_customize->add_control(new QL_Gradient_BG_Toggle_Control(
+        $wp_customize, 'ql_bg_gradient', array(
+            'label'     => 'Gradient Background',
+            'section'   => 'ql_background',
+            'settings'  => 'ql_background[gradient]'
+        ))
+    );
+
+    // Background Gradient picker
+    $wp_customize->add_setting('ql_background[gradient_css]', array(
+        'default'       => '',
+        'type'          => 'option',
+        'transport'     => 'postMessage'
+    ));
+    $wp_customize->add_control(new QL_Gradient_BG_Control(
+        $wp_customize, 'ql_bg_gradient_css', array(
+            'label'     => '',
+            'section'   => 'ql_background',
+            'settings'  => 'ql_background[gradient_css]'
+        ))
+    );
 	
 	
 	/**
@@ -797,7 +1187,157 @@ function ql_customize_register( $wp_customize ){
 			'settings'		=> 'ql_content[content]',
 		))
 	);
-	
+	 
+   // CONTENT FONT
+	$wp_customize->add_setting( 'ql_content[fontinfoa]', array(
+		'default'		=> 'QL_CONTENT_CONTENTFONT',
+		'type'			=> 'option',
+		'capability'	=> 'edit_theme_options',
+	));
+	$wp_customize->add_control( 'ql_content[content]', array(
+		'label'			=> 'Content Font',
+		'section'		=> 'ql_content',
+		'settings'		=> 'ql_content[fontinfoa]',
+		'type'			=> 'select',
+		'choices'		=> array(
+			''			=> '-None-',
+			'Abel'			=> 'Abel',
+			'Abril Fatface'		=> 'Abril Fatface',
+			'Actor'			=> 'Actor',
+			'Aldrich'		=> 'Aldrich',
+			'Alegreya SC'		=> 'Alegreya SC',
+			'Alice'			=> 'Alice',
+			'Anaheim'		=> 'Anaheim',
+			'Asul'			=> 'Asul',
+			'BenchNine'		=> 'BenchNine',
+			'Bigelow Rules'		=> 'Bigelow Rules',
+			'Bilbo Swash Caps'	=> 'Bilbo Swash Caps',
+			'Bubbler One'		=> 'Bubbler One',
+			'Cabin'			=> 'Cabin',
+			'Carrois Gothic'	=> 'Carrois Gothic',
+			'Chela One'		=> 'Chela One',
+			'Cherry Cream Soda'	=> 'Cherry Cream Soda',
+			'Coda'			=> 'Coda',
+			'Cousine'		=> 'Cousine',
+			'Ceviche One'		=> 'Ceviche One',
+			'Chewy'			=> 'Chewy',
+			'Creepster'		=> 'Creepster',
+			'Crushed'		=> 'Crushed',
+			'Droid Sans'		=> 'Droid Sans',
+			'Droid Serif'		=> 'Droid Serif',
+			'Droid Sans Mono'	=> 'Droid Sans Mono',
+			'Eagle Lake'		=> 'Eagle Lake',
+			'Electrolize'		=> 'Electrolize',
+                        'Faster One'		=> 'Faster One',
+			'Fenix'			=> 'Fenix',
+			'Flavors'		=> 'Flavors',
+			'Francois One'		=> 'Francois One',
+			'Finger Paint'		=> 'Finger Paint',
+			'Freckle Face'		=> 'Freckle Face',
+			'Fredoka One'		=> 'Fredoka One',
+			'Geo'			=> 'Geo',
+			'Germania One'		=> 'Germania One',
+			'Goblin One'		=> 'Goblin One',
+			'Gilda Display'		=> 'Gilda Display',
+			'Give You Glory'	=> 'Give You Glory',
+			'Glass Antiqua'		=> 'Glass Antiqua',
+			'Happy Monkey'		=> 'Happy Monkey',
+			'Hammersmith One'	=> 'Hammersmith One',
+			'Hanalei'		=> 'Hanalei',
+			'Holtwood One SC'	=> 'Holtwood One SC',
+			'IM Fell Great Primer SC'	=> 'IM Fell Great Primer SC',
+			'Inika'			=> 'Inika',
+			'Istok Web'		=> 'Istok Web',
+			'Josefin Sans'		=> 'Josefin Sans',
+			'Josefin Slab'		=> 'Josefin Slab',
+			'Judson'		=> 'Judson',
+			'Maiden Orange'		=> 'Maiden Orange',
+			'Marck Script'		=> 'Marck Script',
+			'Medula One'		=> 'Medula One',
+			'Merriweather Sans'	=> 'Merriweather Sans',
+			'Merienda One'		=> 'Merienda One',
+			'Metrophobic'		=> 'Metrophobic',
+			'Montserrat Alternates'	=> 'Montserrat Alternates',
+			'Montserrat Subrayada'	=> 'Montserrat Subrayada',
+                        'Mouse Memoirs'		=> 'Mouse Memoirs',
+			'News Cycle'		=> 'News Cycle',
+			'New Rocker'		=> 'New Rocker',
+			'Nothing You Could Do'	=> 'Nothing You Could Do',
+			'Kavoon'		=> 'Kavoon',
+			'Kenia'			=> 'Kenia',
+			'Knewave'		=> 'Knewave',
+                        'Lato'			=> 'Lato',
+			'Limelight'		=> 'Limelight',
+			'Londrina Sketch'	=> 'Londrina Sketch',
+			'Luckiest Guy'		=> 'Luckiest Guy',
+			'Oleo Script'		=> 'Oleo Script',
+			'Ovo'			=> 'Ovo',
+			'Oxygen'		=> 'Oxygen',
+			'Pathway Gothic One'	=> 'Pathway Gothic One',
+			'Poller One'		=> 'Poller One',
+			'Poly'			=> 'Poly',
+			'Port Lligat Slab'	=> 'Port Lligat Slab',
+			'Port Lligat Sans'	=> 'Port Lligat Sans',
+			'Playball'		=> 'Playball',
+			'Playfair Display'	=> 'Playfair Display',
+			'Quattrocento'		=> 'Quattrocento',
+			'Quintessential'	=> 'Quintessential',
+			'Qwigley'		=> 'Qwigley',
+			'Rancho'		=> 'Rancho',
+			'Revalia'		=> 'Revalia',
+                        'Roboto'		=> 'Roboto',
+			'Ropa Sans'		=> 'Ropa Sans',
+			'Rosario'		=> 'Rosario',
+			'Rouge Script'		=> 'Rouge Script',
+			'Risque'		=> 'Risque',
+			'Rufina'		=> 'Rufina',
+			'Tangerine'		=> 'Tangerine',
+			'Trochut'		=> 'Trochut',
+                        'Trykker'		=> 'Trykker',
+                        'The Girl Next Door'	=> 'The Girl Next Door',
+			'Shadows Into Light'	=> 'Shadows Into Light',
+			'Scada'			=> 'Scada',
+			'Sunshiney'		=> 'Sunshiney',
+			'Ubuntu'		=> 'Ubuntu',
+			'Underdog'		=> 'Underdog',
+			'UnifrakturMaguntia'	=> 'UnifrakturMaguntia',
+			'Unkempt'		=> 'Unkempt',
+			'UnifrakturMaguntia'	=> 'UnifrakturMaguntia',
+			'Wallpoet'		=> 'Wallpoet',
+			'Varela'		=> 'Varela',
+			'Vollkorn'		=> 'Vollkorn',
+                        'Yeseva One'		=> 'Yeseva One',
+		
+
+
+),
+	));
+
+
+
+// Viravnivanie
+    // Position
+	$wp_customize->add_setting( 'ql_content[positiontext]', array(
+		'default'		=> QL_CONTENT_POSITIONTEXT,
+		'type'			=> 'option',
+		'capability'	=> 'edit_theme_options',
+		'transport'		=> 'postMessage',
+	));
+	$wp_customize->add_control( 'ql_content', array(
+		'label'			=> 'Position',
+		'section'		=> 'ql_content',
+		'settings'		=> 'ql_content[positiontext]',
+		'type'			=> 'radio',
+		'choices'		=> array(
+			'left'=>'Left',
+			'center'=>'Center',
+			'right'=>'Right',
+                        'justify'=>'justify',
+		),
+	));
+
+
+
 	// Content text color
 	$wp_customize->add_setting( 'ql_content[color]', array(
 		'default'		=> QL_CONTENT_COLOR,
@@ -812,6 +1352,23 @@ function ql_customize_register( $wp_customize ){
 			'settings'		=> 'ql_content[color]',
 		))
 	);
+
+    // Line spacing
+    $wp_customize->add_setting('ql_content[line_spacing]', array(
+        'default'       => QL_CONTENT_LINE_SPACING,
+        'transport'     => 'postMessage',
+        'type'          => 'option'
+    ));
+
+    $wp_customize->add_control(new QL_Slider_Control($wp_customize, 'ql_content_line_spacing', array(
+            'label'     => 'Line Spacing',
+            'section'   => 'ql_content',
+            'settings'  => 'ql_content[line_spacing]',
+            'min'       => 0,
+            'max'       => 100,
+            'step'      => 1
+        ))
+    );
 	
 	// Content text color
 	$wp_customize->add_setting( 'ql_content[opacity]', array(
@@ -846,7 +1403,13 @@ function ql_customize_css()
 	$ql_background = get_option('ql_background');
 	$ql_layout = get_option('ql_layout');
     ?>
-		<link href='http://fonts.googleapis.com/css?family=<?php echo urlencode($ql_title_tagline['font']); ?>' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=<?php echo urlencode($ql_title_tagline['font']); ?>    ' rel='stylesheet' type='text/css'>
+
+<link href='http://fonts.googleapis.com/css?family=<?php echo urlencode($ql_title_tagline['fontinfo']); ?>    ' rel='stylesheet' type='text/css'>
+
+<link href='http://fonts.googleapis.com/css?family=<?php echo urlencode($ql_content[fontinfoa]); ?>    ' rel='stylesheet' type='text/css'>
+
+
         <style type="text/css">
 			body{
 				background-color:<?php echo $ql_background['color']?$ql_background['color']:QL_BACKGROUND_COLOR; ?>; 
@@ -857,11 +1420,59 @@ function ql_customize_css()
 				background-position:center 25%;
 				<?php endif; ?>
 			}
-            header h1{
-				font-family: '<?php echo $ql_title_tagline['font']?$ql_title_tagline['font']:QL_TITLE_TAGLINE_FONT; ?>';
-				color: <?php echo $ql_title_tagline['title_color']?$ql_title_tagline['title_color']:QL_TITLE_TAGLINE_TITLE_COLOR; ?>;
+
+            header {
+                margin-bottom: <?php echo $ql_title_tagline['header_bottom_margin']; ?>px;
             }
-            #page-content { color:<?php echo $ql_content['color']?$ql_content['color']:QL_CONTENT_COLOR; ?>; }
+
+            header h1{
+				
+text-align:<?php echo $ql_title_tagline['postitle']?$ql_title_tagline['postitle']:QL_CONTENT_POSTITLE; ?>;
+
+
+font-family: '<?php echo $ql_title_tagline['font']?$ql_title_tagline['font']:QL_TITLE_TAGLINE_FONT; ?>';
+				color: <?php echo $ql_title_tagline['title_color']?$ql_title_tagline['title_color']:QL_TITLE_TAGLINE_TITLE_COLOR; ?>;
+
+margin-bottom: <?php echo $ql_title_tagline['title_margin']; ?>px;
+            }
+           
+
+header h2{
+
+
+text-align:<?php echo $ql_title_tagline['postitleinfo']?$ql_title_tagline['postitleinfo']:QL_CONTENT_POSTITLEINFO; ?>;
+				
+font-family: '<?php echo $ql_title_tagline['fontinfo']?$ql_title_tagline['fontinfo']:QL_TITLE_TAGLINE_FONTINFO; ?>';
+
+color:<?php echo $ql_title_tagline['title_colorinfo']?$ql_title_tagline['title_colorinfo']:QL_TITLE_TAGLINE_TITLE_COLORINFO; ?>;
+			
+            }
+
+
+
+
+
+
+ #page-content { 
+
+
+
+
+text-align:<?php echo $ql_content['positiontext']?$ql_content['positiontext']:QL_CONTENT_POSITIONTEXT; ?>;
+
+
+color:<?php echo $ql_content['color']?$ql_content['color']:QL_CONTENT_COLOR; ?>;
+
+ }
+
+
+#content p {
+font-family: '<?php echo $ql_content[fontinfoa]?$ql_content[fontinfoa]:QL_CONTENT_CONTENTFONT; ?>';
+line-height: <?php echo $ql_content['line_spacing']; ?>px
+}
+
+
+
             #wrap {
 				padding: <?php echo $ql_layout['padding']?$ql_layout['padding']:QL_LAYOUT_PADDING; ?>px; 
 				border-radius:<?php echo $ql_layout['roundness']?$ql_layout['roundness']:QL_LAYOUT_ROUNDNESS ?>px; 
@@ -926,7 +1537,19 @@ function ql_customize_preview() {
 			value.bind(function(to) {
 				$('#page-content').css('color', to);
 			});
-		});
+
+		// content font-family settings
+		wp.customize('ql_content[positiontext]',function( value ) {
+			value.bind(function(to) {
+				$('#page-content').css('text-align', to);
+			  
+                           
+
+
+    });
+		
+
+});
 		
 		// position
 		wp.customize('ql_layout[position]', function (value){
@@ -1106,6 +1729,15 @@ function ql_customize_preview() {
 			});
 		});
 		
+		// title align
+		wp.customize('ql_title_tagline[postitle]', function (value){
+			value.bind(function(to){
+				$('#site-title').css('text-align', to);
+			});
+		});
+
+
+
 		// newsletter submit button color
 		wp.customize('ql_widgets[email_submit_color]', function (value){
 			value.bind(function(to){
@@ -1144,10 +1776,22 @@ function ql_customize_preview() {
 		}
 		
 		// Content
-		wp.customize('ql_content[content]', function (value){
+		
+             
+
+                wp.customize('ql_content[content]', function (value){
 			value.bind(function(to){
 				$('#page-content').html(parseContent(to));
-			});
+			
+
+});
+
+  
+
+
+
+
+
 		});
 		
 	} )( jQuery)

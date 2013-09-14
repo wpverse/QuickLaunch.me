@@ -197,4 +197,35 @@ function ql_email_list()
 
 }
 
+/**
+ * Enqueques customization screen scripts.
+ * 
+ * @return void
+ */
+function ql_customizer_scripts()
+{
+
+    $template_uri = get_template_directory_uri();
+
+    wp_enqueue_script('ql-customizer', get_template_directory_uri() . '/js/customizer.js', array('jquery', 'jquery-ui-slider'), '', true);
+
+    wp_enqueue_style('jquery-ui', 'http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css');
+    wp_enqueue_style('ql-customizer', get_template_directory_uri() . '/customizer.css', '');
+
+}
+add_action('customize_controls_print_scripts', 'ql_customizer_scripts');
+
+/**
+ * Enqueques scripts for the frame inside the customization screen.
+ * 
+ * @return void
+ */
+function ql_customized_scripts()
+{
+
+    wp_enqueue_script('ql-customized', get_template_directory_uri() . '/js/customized.js', array('jquery', 'customize-preview'), '', true);
+
+}
+add_action('customize_preview_init', 'ql_customized_scripts');
+
 ?>

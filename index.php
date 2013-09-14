@@ -74,7 +74,7 @@ $ql_title_tagline = get_option('ql_title_tagline');
 		<!-- Main Content -->
 		<section id="content">
 		
-			<div id="page-content">
+			<div id="page-content"> 
 				<?php echo apply_filters('the_content', stripslashes($ql_content['content']?$ql_content['content']:QL_CONTENT_CONTENT)) ?>
 			</div>
 			<?php if($ql_widgets['email'] || !is_admin()): ?>
