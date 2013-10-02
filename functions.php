@@ -1407,7 +1407,7 @@ function ql_customize_css()
 
 <link href='http://fonts.googleapis.com/css?family=<?php echo urlencode($ql_title_tagline['fontinfo']); ?>    ' rel='stylesheet' type='text/css'>
 
-<link href='http://fonts.googleapis.com/css?family=<?php echo urlencode($ql_content[fontinfoa]); ?>    ' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=<?php echo urlencode($ql_content['fontinfoa']); ?>    ' rel='stylesheet' type='text/css'>
 
 
         <style type="text/css">
@@ -1467,7 +1467,7 @@ color:<?php echo $ql_content['color']?$ql_content['color']:QL_CONTENT_COLOR; ?>;
 
 
 #content p {
-font-family: '<?php echo $ql_content[fontinfoa]?$ql_content[fontinfoa]:QL_CONTENT_CONTENTFONT; ?>';
+font-family: '<?php echo $ql_content['fontinfoa']?$ql_content['fontinfoa']:QL_CONTENT_CONTENTFONT; ?>';
 line-height: <?php echo $ql_content['line_spacing']; ?>px
 }
 
