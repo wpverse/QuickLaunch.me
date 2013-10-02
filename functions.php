@@ -1141,25 +1141,12 @@ function ql_customize_register( $wp_customize ){
         'type'          => 'option',
         'transport'     => 'postMessage'
     ));
-    $wp_customize->add_control(new QL_Gradient_BG_Toggle_Control(
+    $wp_customize->add_control(new QL_Gradient_BG_Control(
         $wp_customize, 'ql_bg_gradient', array(
             'label'     => 'Gradient Background',
             'section'   => 'ql_background',
-            'settings'  => 'ql_background[gradient]'
-        ))
-    );
-
-    // Background Gradient picker
-    $wp_customize->add_setting('ql_background[gradient_css]', array(
-        'default'       => '',
-        'type'          => 'option',
-        'transport'     => 'postMessage'
-    ));
-    $wp_customize->add_control(new QL_Gradient_BG_Control(
-        $wp_customize, 'ql_bg_gradient_css', array(
-            'label'     => '',
-            'section'   => 'ql_background',
-            'settings'  => 'ql_background[gradient_css]'
+            'settings'  => 'ql_background[gradient]',
+            'choices'    => array('blue', 'green', 'red', 'dark-grey', 'grey')
         ))
     );
 	
@@ -1403,11 +1390,16 @@ function ql_customize_css()
 	$ql_background = get_option('ql_background');
 	$ql_layout = get_option('ql_layout');
     ?>
-<link href='http://fonts.googleapis.com/css?family=<?php echo urlencode($ql_title_tagline['font']); ?>    ' rel='stylesheet' type='text/css'>
 
-<link href='http://fonts.googleapis.com/css?family=<?php echo urlencode($ql_title_tagline['fontinfo']); ?>    ' rel='stylesheet' type='text/css'>
-
+<?php if ( ! empty($ql_title_tagline['font']) ): ?>
+<link href='http://fonts.googleapis.com/css?family=<?php echo urlencode($ql_title_tagline['font']); ?>' rel='stylesheet' type='text/css'>
+<?php endif; ?>
+<?php if ( ! empty($ql_title_tagline['fontinfo']) ): ?>
+<link href='http://fonts.googleapis.com/css?family=<?php echo urlencode($ql_title_tagline['fontinfo']); ?>' rel='stylesheet' type='text/css'>
+<?php endif; ?>
+<?php if ( ! empty($ql_content['fontinfoa']) ): ?>
 <link href='http://fonts.googleapis.com/css?family=<?php echo urlencode($ql_content['fontinfoa']); ?>    ' rel='stylesheet' type='text/css'>
+<?php endif; ?>
 
 
         <style type="text/css">
@@ -1419,6 +1411,11 @@ function ql_customize_css()
 				background-repeat:no-repeat;
 				background-position:center 25%;
 				<?php endif; ?>
+                <?php if ( $ql_background['gradient'] && $ql_background['gradient'] !== 'false' ): ?>
+                background-image: url(<?php echo get_template_directory_uri() . '/images/backgrounds/' . $ql_background['gradient'] . '-gradient.jpg'; ?>);
+                background-size: 100% 100%;
+                background-attachment: scroll;
+                <?php endif; ?>
 			}
 
             header {

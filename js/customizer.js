@@ -87,17 +87,48 @@
 
     }
 
-    function setupGradientPickers() {
+    $.fn.gradientPicker = function() {
+        return this.each(function() {
 
-        gradX('.ql-gradient-picker');
+            var container = $(this),
+                valueInput = $('.gradient-value', container),
+                toggle = $('.gradient-toggle', container),
+                choicesList = $('.gradient-sets', container),
+                choices = $('a', choicesList);
 
+            // Choice indicators
+            choices.on('click', function(evt) {
+                evt.preventDefault();
+                if (toggle.prop('checked')) {
+                    var a = $(this);
+                    choices.parent().removeClass('selected');
+                    a.parent().addClass('selected')
+                    valueInput.val(a.attr('class'))
+                              .trigger('change');
+                }
+            });
+
+            toggle.on('change', function(evt) {
+                if ($(this).prop('checked')) {
+                    choices.eq(0).trigger('click');
+                    choicesList.removeClass('disabled');
+                }
+                else {
+                    valueInput.val('false')
+                              .trigger('change');
+                    choicesList.addClass('disabled');
+                }
+            });
+
+        });
     }
 
     $(function() {
 
         setupSliders();
         setupAligners();
-        setupGradientPickers();
+        
+        $('.gradient-picker').gradientPicker();
 
     });
 
