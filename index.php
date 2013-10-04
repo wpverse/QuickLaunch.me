@@ -54,6 +54,7 @@ $ql_title_tagline = get_option('ql_title_tagline');
 		<?php
 		if($ql_widgets['video'] || !is_admin()): 
 			$urlParams = parse_url($ql_widgets['video']);
+            if ( isset($urlParams['query']) ):
 			parse_str($urlParams['query'], $youtubeParams);
 		?>
 		<!-- Video -->
@@ -69,7 +70,7 @@ $ql_title_tagline = get_option('ql_title_tagline');
 			</object>
 		</section>
 		<!-- End Video -->
-		<?php endif; ?>
+		<?php endif; endif; ?>
 		
 		<!-- Main Content -->
 		<section id="content">

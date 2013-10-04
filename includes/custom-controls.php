@@ -32,21 +32,6 @@ function ql_define_custom_controls($wp_customize)
 
     }
 
-    class QL_Gradient_BG_Toggle_Control extends WP_Customize_Control
-    {
-
-        public $type = 'gradient_bg_toggle';
-
-        public function render_content()
-        {
-        ?>
-            <span class="customize-control-title"><?php echo esc_html($this->label); ?></span>
-            <label><input type="checkbox" <?php checked($this->value(), true); ?> <?php $this->link(); ?>> Display gradient as background</label>
-        <?php
-        }
-
-    }
-
     class QL_Gradient_BG_Control extends WP_Customize_Control
     {
 
@@ -55,8 +40,16 @@ function ql_define_custom_controls($wp_customize)
         public function render_content()
         {
         ?>
-            <div class="ql-gradient-picker"></div>
-            <!-- <textarea rows="5" style="width: 100%" <?php $this->link(); ?>><?php echo esc_html($this->value()); ?></textarea> -->
+            <div class="gradient-picker">
+                <span class="customize-control-title"><?php echo esc_html($this->label); ?></span>
+                <label><input type="checkbox" class="gradient-toggle" <?php checked(false, !$this->value()); ?>> Use gradient as background</label>
+                <ul class="gradient-sets">
+                    <?php foreach ( $this->choices as $color ): ?>
+                    <li><a href="#" class="<?php echo $color; ?>"></a></li>
+                    <?php endforeach; ?>
+                </ul>
+                <input type="text" value="<?php echo esc_attr($this->value()); ?>" <?php $this->link(); ?> class="gradient-value">
+            </div>
         <?php
         }
 
