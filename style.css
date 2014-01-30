@@ -3,9 +3,13 @@ Theme Name: QuickLaunch
 Theme URI: http://quicklaunch.me
 Description: A one page theme for WordPress like LaunchRock. See terms of use on footer of QuickLaunch.me.
 Author: Neochrome, Inc. Brux, Gihan, Noel Saw
-Version: 2.1
+Version: 2.3.1
 */
 @import url(style-reset.css);
+
+html {
+    height: 100%;
+}
 
 /* Typography */
 /* commenting for including google fonts
@@ -336,6 +340,7 @@ header {
 #content p {
 	line-height: 1.5em;
 	margin-top:13px;
+      
 }
 
 /* Center Image */
