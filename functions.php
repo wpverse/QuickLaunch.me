@@ -215,7 +215,7 @@ function ql_auto_link($content)
 		return $content;
 
 }
-add_filter('the_content', 'ql_auto_link');
+//add_filter('the_content', 'ql_auto_link');
 
 /**
  * Sidebar widgets
@@ -1761,8 +1761,8 @@ function ql_customize_preview() {
 		 */
 		function parseContent(content){
 			// parse links
-			var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-			content = content.replace(exp,"<a href='$1'>$1</a>");
+			//var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+			//content = content.replace(exp,"<a href='$1'>$1</a>");
 			
 			// add html p tags
 			content = '<p>'+content;
