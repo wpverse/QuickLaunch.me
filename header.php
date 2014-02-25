@@ -10,7 +10,7 @@ $ql_layout = get_option('ql_layout');
 	<title><?php bloginfo('title') ?></title>
 	
 	<link rel="stylesheet" href="<?php bloginfo('stylesheet_url') ?>">
-	<link rel="stylesheet" href="<?php bloginfo('template_url') ?>/add-on/slider/coin-slider-styles.css">
+	<link rel="stylesheet" href="<?php bloginfo('template_url') ?>/css/flexslider.css">
 
 	<!--[if lt IE 9]>
 	<script src="<?php bloginfo('template_url') ?>/js/html5.js"></script>

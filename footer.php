@@ -30,7 +30,12 @@ $ql_title_tagline = get_option('ql_title_tagline');
 			
 			<?php if($ql_widgets['slider']): ?>
 			jQuery(function(){
-				jQuery('#coin-slider').coinslider({width:468, links:false, navigation:false});
+				//jQuery('#coin-slider').coinslider({width:468, links:false, navigation:false});
+			jQuery("document").ready(function(){
+				jQuery('#coin-slider').flexslider({
+				        animation: "slide",
+		      		});
+			});
 			});
 			<?php endif; ?>
 	</script>
