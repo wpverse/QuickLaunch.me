@@ -496,12 +496,52 @@ function ql_customize_register( $wp_customize ){
 	 * Additional title controls
 	 */
 
-       
+
+	
+	// Position
+	$wp_customize->add_setting( 'ql_title_tagline[postitleinfo]', array(
+		'default'		=> QL_CONTENT_POSTITLEINFO,
+		'type'			=> 'option',
+		'capability'	=> 'edit_theme_options',
+		'transport'		=> 'postMessage',
+	));
+	$wp_customize->add_control( 'ql_title_tagline[postitleinfo]', array(
+		'label'			=> 'Position Tagline',
+		'section'		=> 'title_tagline',
+		'settings'		=> 'ql_title_tagline[postitleinfo]',
+		'type'			=> 'radio',
+		'choices'		=> array(
+			'left'=>'Left',
+			'center'=>'Center',
+			'right'=>'Right',
+                        'justify'=>'justify',
+		),
+		'priority'		=> '12'
+	));
+
+	 // Position
+	$wp_customize->add_setting( 'ql_title_tagline[postitle]', array(
+		'default'		=> QL_CONTENT_POSTITLE,
+		'type'			=> 'option',
+		'transport'		=> 'postMessage',
+	));
+	$wp_customize->add_control( 'ql_title_tagline[postitle]', array(
+		'label'			=> 'Position Title',
+		'section'		=> 'title_tagline',
+		'settings'		=> 'ql_title_tagline[postitle]',
+		'type'			=> 'radio',
+		'choices'		=> array(
+			'left'=>'Left',
+			'center'=>'Center',
+			'right'=>'Right',
+                        'justify'=>'justify',
+		),
+		'priority'		=> '11'
+	));
 
 
 
-
-	// Heading font family
+		// Heading font family
 	$wp_customize->add_setting( 'ql_title_tagline[font]', array(
 		'default'		=> 'QL_TITLE_TAGLINE_FONT',
 		'type'			=> 'option',
@@ -620,73 +660,10 @@ function ql_customize_register( $wp_customize ){
 			'Varela'		=> 'Varela',
 			'Vollkorn'		=> 'Vollkorn',
                         'Yeseva One'		=> 'Yeseva One',
-		
-
-
-),
+			),
+		'priority'		=> '13'
 	));
 	
-
-
-	
- // Position
-	$wp_customize->add_setting( 'ql_title_tagline[postitle]', array(
-		'default'		=> QL_CONTENT_POSTITLE,
-		'type'			=> 'option',
-		'transport'		=> 'postMessage'
-	));
-	$wp_customize->add_control( 'ql_title_tagline[postitle]', array(
-		'label'			=> 'Position Title',
-		'section'		=> 'title_tagline',
-		'settings'		=> 'ql_title_tagline[postitle]',
-		'type'			=> 'radio',
-		'choices'		=> array(
-			'left'=>'Left',
-			'center'=>'Center',
-			'right'=>'Right',
-                        'justify'=>'justify',
-		),
-	));
-        
-
-
-
-
-
-
-	// Heading text color
-	$wp_customize->add_setting( 'ql_title_tagline[title_color]', array(
-		'default'		=> QL_TITLE_TAGLINE_TITLE_COLOR,
-		'type'			=> 'option',
-		'capability'	=> 'edit_theme_options',
-		'transport'		=> 'postMessage',
-	));
-	$wp_customize->add_control( new WP_Customize_Color_Control( 
-		$wp_customize, 'ql_title_tagline_title_color', array(
-			'label'			=> 'Title Color',
-			'section'		=> 'title_tagline',
-			'settings'		=> 'ql_title_tagline[title_color]',
-		))
-	);
-
-    // Title bottom margin
-    $wp_customize->add_setting('ql_title_tagline[title_margin]', array(
-        'default'       => QL_TITLE_BOTTOM_MARGIN,
-        'transport'     => 'postMessage',
-        'type'          => 'option'
-    ));
-
-    $wp_customize->add_control(new QL_Slider_Control($wp_customize, 'ql_title_bottom_margin', array(
-            'label'     => 'Title Bottom Margin',
-            'section'   => 'title_tagline',
-            'settings'  => 'ql_title_tagline[title_margin]',
-            'min'       => 0,
-            'max'       => 100,
-            'step'      => 1
-        ))
-    );
-	
-
 // Heading font family
 	$wp_customize->add_setting( 'ql_title_tagline[fontinfo]', array(
 		'default'		=> 'QL_TITLE_TAGLINE_FONTINFO',
@@ -805,18 +782,32 @@ function ql_customize_register( $wp_customize ){
 			'Wallpoet'		=> 'Wallpoet',
 			'Varela'		=> 'Varela',
 			'Vollkorn'		=> 'Vollkorn',
-                        'Yeseva One'		=> 'Yeseva One',
-		
-
-
-),
+                        'Yeseva One'		=> 'Yeseva One',),
+		'priority'		=> '14'
 	));
 
+    // Title bottom margin
+    $wp_customize->add_setting('ql_title_tagline[title_margin]', array(
+        'default'       => QL_TITLE_BOTTOM_MARGIN,
+        'transport'     => 'postMessage',
+        'type'          => 'option',
+    ));
+
+    $wp_customize->add_control(new QL_Slider_Control($wp_customize, 'ql_title_bottom_margin', array(
+            'label'     => 'Title Bottom Margin',
+            'section'   => 'title_tagline',
+            'settings'  => 'ql_title_tagline[title_margin]',
+            'min'       => 0,
+            'max'       => 100,
+            'step'      => 1,
+	'priority'		=> '15'
+        ))
+    );
     // Tagline bottom margin (Header bottom margin)
     $wp_customize->add_setting('ql_title_tagline[header_bottom_margin]', array(
         'default'       => QL_HEADER_BOTTOM_MARGIN,
         'transport'     => 'postMessage',
-        'type'          => 'option'
+        'type'          => 'option',
     ));
 
     $wp_customize->add_control(new QL_Slider_Control($wp_customize, 'ql_header_bottom_margin', array(
@@ -825,32 +816,28 @@ function ql_customize_register( $wp_customize ){
             'settings'  => 'ql_title_tagline[header_bottom_margin]',
             'min'       => 0,
             'max'       => 100,
-            'step'      => 1
+            'step'      => 1,
+	'priority'		=> '16'
         ))
     );
 
 
-// Position
-	$wp_customize->add_setting( 'ql_title_tagline[postitleinfo]', array(
-		'default'		=> QL_CONTENT_POSTITLEINFO,
+    // Heading text color
+	$wp_customize->add_setting( 'ql_title_tagline[title_color]', array(
+		'default'		=> QL_TITLE_TAGLINE_TITLE_COLOR,
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
 		'transport'		=> 'postMessage',
 	));
-	$wp_customize->add_control( 'ql_title_tagline[postitleinfo]', array(
-		'label'			=> 'Position Tagline',
-		'section'		=> 'title_tagline',
-		'settings'		=> 'ql_title_tagline[postitleinfo]',
-		'type'			=> 'radio',
-		'choices'		=> array(
-			'left'=>'Left',
-			'center'=>'Center',
-			'right'=>'Right',
-                        'justify'=>'justify',
-		),
-	));
+	$wp_customize->add_control( new WP_Customize_Color_Control( 
+		$wp_customize, 'ql_title_tagline_title_color', array(
+			'label'			=> 'Title Color',
+			'section'		=> 'title_tagline',
+			'settings'		=> 'ql_title_tagline[title_color]',
+		'priority'		=> '17'
+		))
+	);
 
-       
         //Tagline text color
 	$wp_customize->add_setting( 'ql_title_tagline[title_colorinfo]', array(
 		'default'		=> QL_TITLE_TAGLINE_TITLE_COLORINFO,
@@ -863,11 +850,9 @@ function ql_customize_register( $wp_customize ){
 			'label'			=> 'Tagline Color',
 			'section'		=> 'title_tagline',
 			'settings'		=> 'ql_title_tagline[title_colorinfo]',
+		'priority'		=> '18'
 		))
 	);
-
-
-
 
 	// Logo
 	$wp_customize->add_setting( 'ql_title_tagline[logo]', array(
@@ -881,6 +866,7 @@ function ql_customize_register( $wp_customize ){
 			'label'			=> 'Logo',
 			'section'		=> 'title_tagline',
 			'settings'		=> 'ql_title_tagline[logo]',
+		'priority'		=> '19'
 		))
 	);
 	
