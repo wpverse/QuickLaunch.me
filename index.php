@@ -5,6 +5,7 @@ $ql_footer = get_option('ql_footer');
 $ql_layout = get_option('ql_layout');
 $ql_social = get_option('ql_social');
 $ql_content = get_option('ql_content');
+$ql_emailsign = get_option('ql_emailsign');
 $ql_title_tagline = get_option('ql_title_tagline');
 ?>
 	
@@ -35,19 +36,34 @@ $ql_title_tagline = get_option('ql_title_tagline');
 		<!-- Image slider -->
 		<section id="image-slider" class="<?php echo $ql_widgets['slider']?'':'hidden'; ?>">
 			<div id="coin-slider">
+				<ul class="slides">
 				<?php if($ql_widgets['slider_image_1']): ?>
-				<img id="slider-image-1" src="<?php echo $ql_widgets['slider_image_1'] ?>" style="width:100%;" />
+				<li><img id="slider-image-1" src="<?php echo $ql_widgets['slider_image_1'] ?>" style="width:100%;" /></li>
 				<?php endif; ?>
 				<?php if($ql_widgets['slider_image_2']): ?>
-				<img id="slider-image-2" src="<?php echo $ql_widgets['slider_image_2'] ?>" style="width:100%;" />
+				<li><img id="slider-image-2" src="<?php echo $ql_widgets['slider_image_2'] ?>" style="width:100%;" /></li>
 				<?php endif; ?>
 				<?php if($ql_widgets['slider_image_3']): ?>
-				<img id="slider-image-3" src="<?php echo $ql_widgets['slider_image_3'] ?>" style="width:100%;" />
+				<li><img id="slider-image-3" src="<?php echo $ql_widgets['slider_image_3'] ?>" style="width:100%;" /></li>
 				<?php endif; ?>
 				<?php if($ql_widgets['slider_image_4']): ?>
-				<img id="slider-image-4" src="<?php echo $ql_widgets['slider_image_4'] ?>" style="width:100%;" />
+				<li><img id="slider-image-4" src="<?php echo $ql_widgets['slider_image_4'] ?>" style="width:100%;" /></li>
 				<?php endif; ?>
+				</ul>
 			</div>
+			<?php if($ql_widgets['email'] || !is_admin()): ?>
+			<div id="email" class="email-top <?php echo (($ql_widgets['email'] && !$ql_widgets['mailchimp']) && ($ql_emailsign['emailtipposition']=='belowslider' || $ql_emailsign['emailtipposition']=='both'))?'':'hidden'; ?>">
+				<form action="" method="post" class="newsletter-form">
+					<p>
+						<input type="text" name="email" value="" placeholder="<?php echo $ql_emailsign['emailtiptext']?>" size="50" class="email"> 
+						<input type="submit" name="submit" value="Submit" id="newsletter-submit" class="btn <?php echo $ql_widgets['email_submit_color']; ?>">
+					</p>
+				</form>
+			</div>
+			<div id="mailchimp" class="newsletter-form <?php echo ($ql_widgets['email'] && $ql_widgets['mailchimp'])?'':'hidden'; ?>">
+				<?php the_widget('NS_Widget_MailChimp', array('signup_text'=>'Submit')); ?>
+			</div>
+			<?php endif; ?>
 		</section>
 		<!-- End Image slider -->
 		
@@ -79,10 +95,10 @@ $ql_title_tagline = get_option('ql_title_tagline');
 				<?php echo apply_filters('the_content', stripslashes($ql_content['content']?$ql_content['content']:QL_CONTENT_CONTENT)) ?>
 			</div>
 			<?php if($ql_widgets['email'] || !is_admin()): ?>
-			<div id="email" class="<?php echo ($ql_widgets['email'] && !$ql_widgets['mailchimp'])?'':'hidden'; ?>">
+			<div id="email" class="email-bottom <?php echo (($ql_widgets['email'] && !$ql_widgets['mailchimp']) && ($ql_emailsign['emailtipposition']=='bottom' || $ql_emailsign['emailtipposition']=='both'))?'':'hidden'; ?>">
 				<form action="" method="post" class="newsletter-form">
 					<p>
-						<input type="text" name="email" value="" placeholder="Signup for email newsletters" size="50" class="email"> 
+						<input type="text" name="email" value="" placeholder="<?php echo $ql_emailsign['emailtiptext']?>" size="50" class="email"> 
 						<input type="submit" name="submit" value="Submit" id="newsletter-submit" class="btn <?php echo $ql_widgets['email_submit_color']; ?>">
 					</p>
 				</form>

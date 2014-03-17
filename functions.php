@@ -35,7 +35,8 @@ define('QL_LAYOUT_BOX_SHADOW', '10');
 define('QL_LAYOUT_POSITION', 'center');
 define('QL_CONTENT_POSTITLEINFO', 'center');
 define('QL_TITLE_TAGLINE_FONTINFO', 'Times New Roman');
-
+define('QL_CONTENT_POSITIONEMAIL', 'bottom');
+define('QL_CONTENT_EMAIL_TIPTEXT', 'Signup for email newsletters');
 
 
 define('QL_TITLE_TAGLINE_TEXTALIGN', 'center');
@@ -49,6 +50,9 @@ define('QL_CONTENT_CONTENT', 'Lorem ipsum dolor sit amet, consetetur sadipscing 
 define('QL_CONTENT_OPACITY', '100');
 define('QL_CONTENT_COLOR', '#000000');
 define('QL_CONTENT_CONTENTFONT', 'Times New Roman');
+define('QL_CONTENT_CONTENTH3FONT', 'Abel');
+define('QL_CONTENT_H3_FONTSIZE', 14);
+define('QL_CONTENT_H3_COLOR', '#000000');
 
 define('QL_TITLE_BOTTOM_MARGIN', 0);
 define('QL_HEADER_BOTTOM_MARGIN', 18);
@@ -215,7 +219,7 @@ function ql_auto_link($content)
 		return $content;
 
 }
-add_filter('the_content', 'ql_auto_link');
+//add_filter('the_content', 'ql_auto_link');
 
 /**
  * Sidebar widgets
@@ -344,7 +348,7 @@ function ql_customize_register( $wp_customize ){
 	$wp_customize->add_section( 'ql_social', array(
 		'title'			=> 'Social Networks',
 		'description'	=> 'Social networks links',
-		'priority'		=> 35,
+		'priority'		=> 38,
 	));
 	
 	// Twitter
@@ -424,7 +428,7 @@ function ql_customize_register( $wp_customize ){
 	$wp_customize->add_section( 'ql_layout', array(
 		'title'			=> 'Layout',
 		'description'	=> 'Site layout settings',
-		'priority'		=> 35,
+		'priority'		=> 37,
 	));
 	
 	// Position
@@ -492,12 +496,52 @@ function ql_customize_register( $wp_customize ){
 	 * Additional title controls
 	 */
 
-       
+
+	
+	// Position
+	$wp_customize->add_setting( 'ql_title_tagline[postitleinfo]', array(
+		'default'		=> QL_CONTENT_POSTITLEINFO,
+		'type'			=> 'option',
+		'capability'	=> 'edit_theme_options',
+		'transport'		=> 'postMessage',
+	));
+	$wp_customize->add_control( 'ql_title_tagline[postitleinfo]', array(
+		'label'			=> 'Position Tagline',
+		'section'		=> 'title_tagline',
+		'settings'		=> 'ql_title_tagline[postitleinfo]',
+		'type'			=> 'radio',
+		'choices'		=> array(
+			'left'=>'Left',
+			'center'=>'Center',
+			'right'=>'Right',
+                        'justify'=>'justify',
+		),
+		'priority'		=> '12'
+	));
+
+	 // Position
+	$wp_customize->add_setting( 'ql_title_tagline[postitle]', array(
+		'default'		=> QL_CONTENT_POSTITLE,
+		'type'			=> 'option',
+		'transport'		=> 'postMessage',
+	));
+	$wp_customize->add_control( 'ql_title_tagline[postitle]', array(
+		'label'			=> 'Position Title',
+		'section'		=> 'title_tagline',
+		'settings'		=> 'ql_title_tagline[postitle]',
+		'type'			=> 'radio',
+		'choices'		=> array(
+			'left'=>'Left',
+			'center'=>'Center',
+			'right'=>'Right',
+                        'justify'=>'justify',
+		),
+		'priority'		=> '11'
+	));
 
 
 
-
-	// Heading font family
+		// Heading font family
 	$wp_customize->add_setting( 'ql_title_tagline[font]', array(
 		'default'		=> 'QL_TITLE_TAGLINE_FONT',
 		'type'			=> 'option',
@@ -616,73 +660,10 @@ function ql_customize_register( $wp_customize ){
 			'Varela'		=> 'Varela',
 			'Vollkorn'		=> 'Vollkorn',
                         'Yeseva One'		=> 'Yeseva One',
-		
-
-
-),
+			),
+		'priority'		=> '13'
 	));
 	
-
-
-	
- // Position
-	$wp_customize->add_setting( 'ql_title_tagline[postitle]', array(
-		'default'		=> QL_CONTENT_POSTITLE,
-		'type'			=> 'option',
-		'transport'		=> 'postMessage'
-	));
-	$wp_customize->add_control( 'ql_title_tagline[postitle]', array(
-		'label'			=> 'Position Title',
-		'section'		=> 'title_tagline',
-		'settings'		=> 'ql_title_tagline[postitle]',
-		'type'			=> 'radio',
-		'choices'		=> array(
-			'left'=>'Left',
-			'center'=>'Center',
-			'right'=>'Right',
-                        'justify'=>'justify',
-		),
-	));
-        
-
-
-
-
-
-
-	// Heading text color
-	$wp_customize->add_setting( 'ql_title_tagline[title_color]', array(
-		'default'		=> QL_TITLE_TAGLINE_TITLE_COLOR,
-		'type'			=> 'option',
-		'capability'	=> 'edit_theme_options',
-		'transport'		=> 'postMessage',
-	));
-	$wp_customize->add_control( new WP_Customize_Color_Control( 
-		$wp_customize, 'ql_title_tagline_title_color', array(
-			'label'			=> 'Title Color',
-			'section'		=> 'title_tagline',
-			'settings'		=> 'ql_title_tagline[title_color]',
-		))
-	);
-
-    // Title bottom margin
-    $wp_customize->add_setting('ql_title_tagline[title_margin]', array(
-        'default'       => QL_TITLE_BOTTOM_MARGIN,
-        'transport'     => 'postMessage',
-        'type'          => 'option'
-    ));
-
-    $wp_customize->add_control(new QL_Slider_Control($wp_customize, 'ql_title_bottom_margin', array(
-            'label'     => 'Title Bottom Margin',
-            'section'   => 'title_tagline',
-            'settings'  => 'ql_title_tagline[title_margin]',
-            'min'       => 0,
-            'max'       => 100,
-            'step'      => 1
-        ))
-    );
-	
-
 // Heading font family
 	$wp_customize->add_setting( 'ql_title_tagline[fontinfo]', array(
 		'default'		=> 'QL_TITLE_TAGLINE_FONTINFO',
@@ -801,18 +782,32 @@ function ql_customize_register( $wp_customize ){
 			'Wallpoet'		=> 'Wallpoet',
 			'Varela'		=> 'Varela',
 			'Vollkorn'		=> 'Vollkorn',
-                        'Yeseva One'		=> 'Yeseva One',
-		
-
-
-),
+                        'Yeseva One'		=> 'Yeseva One',),
+		'priority'		=> '14'
 	));
 
+    // Title bottom margin
+    $wp_customize->add_setting('ql_title_tagline[title_margin]', array(
+        'default'       => QL_TITLE_BOTTOM_MARGIN,
+        'transport'     => 'postMessage',
+        'type'          => 'option',
+    ));
+
+    $wp_customize->add_control(new QL_Slider_Control($wp_customize, 'ql_title_bottom_margin', array(
+            'label'     => 'Title Bottom Margin',
+            'section'   => 'title_tagline',
+            'settings'  => 'ql_title_tagline[title_margin]',
+            'min'       => 0,
+            'max'       => 100,
+            'step'      => 1,
+	'priority'		=> '15'
+        ))
+    );
     // Tagline bottom margin (Header bottom margin)
     $wp_customize->add_setting('ql_title_tagline[header_bottom_margin]', array(
         'default'       => QL_HEADER_BOTTOM_MARGIN,
         'transport'     => 'postMessage',
-        'type'          => 'option'
+        'type'          => 'option',
     ));
 
     $wp_customize->add_control(new QL_Slider_Control($wp_customize, 'ql_header_bottom_margin', array(
@@ -821,32 +816,28 @@ function ql_customize_register( $wp_customize ){
             'settings'  => 'ql_title_tagline[header_bottom_margin]',
             'min'       => 0,
             'max'       => 100,
-            'step'      => 1
+            'step'      => 1,
+	'priority'		=> '16'
         ))
     );
 
 
-// Position
-	$wp_customize->add_setting( 'ql_title_tagline[postitleinfo]', array(
-		'default'		=> QL_CONTENT_POSTITLEINFO,
+    // Heading text color
+	$wp_customize->add_setting( 'ql_title_tagline[title_color]', array(
+		'default'		=> QL_TITLE_TAGLINE_TITLE_COLOR,
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
 		'transport'		=> 'postMessage',
 	));
-	$wp_customize->add_control( 'ql_title_tagline[postitleinfo]', array(
-		'label'			=> 'Position Tagline',
-		'section'		=> 'title_tagline',
-		'settings'		=> 'ql_title_tagline[postitleinfo]',
-		'type'			=> 'radio',
-		'choices'		=> array(
-			'left'=>'Left',
-			'center'=>'Center',
-			'right'=>'Right',
-                        'justify'=>'justify',
-		),
-	));
+	$wp_customize->add_control( new WP_Customize_Color_Control( 
+		$wp_customize, 'ql_title_tagline_title_color', array(
+			'label'			=> 'Title Color',
+			'section'		=> 'title_tagline',
+			'settings'		=> 'ql_title_tagline[title_color]',
+		'priority'		=> '17'
+		))
+	);
 
-       
         //Tagline text color
 	$wp_customize->add_setting( 'ql_title_tagline[title_colorinfo]', array(
 		'default'		=> QL_TITLE_TAGLINE_TITLE_COLORINFO,
@@ -859,11 +850,9 @@ function ql_customize_register( $wp_customize ){
 			'label'			=> 'Tagline Color',
 			'section'		=> 'title_tagline',
 			'settings'		=> 'ql_title_tagline[title_colorinfo]',
+		'priority'		=> '18'
 		))
 	);
-
-
-
 
 	// Logo
 	$wp_customize->add_setting( 'ql_title_tagline[logo]', array(
@@ -877,6 +866,7 @@ function ql_customize_register( $wp_customize ){
 			'label'			=> 'Logo',
 			'section'		=> 'title_tagline',
 			'settings'		=> 'ql_title_tagline[logo]',
+		'priority'		=> '19'
 		))
 	);
 	
@@ -887,7 +877,7 @@ function ql_customize_register( $wp_customize ){
 	$wp_customize->add_section( 'ql_footer', array(
 		'title'			=> 'Footer',
 		'description'	=> 'Site footer settings',
-		'priority'		=> 35,
+		'priority'		=> 40,
 	));
 	
 	// Footer content
@@ -911,7 +901,7 @@ function ql_customize_register( $wp_customize ){
 	$wp_customize->add_section( 'ql_widgets', array(
 		'title'			=> 'Widgets',
 		'description'	=> 'Widgets settings',
-		'priority'		=> 35,
+		'priority'		=> 39,
 	));
 	
 	// email
@@ -1310,7 +1300,7 @@ function ql_customize_register( $wp_customize ){
 		'capability'	=> 'edit_theme_options',
 		'transport'		=> 'postMessage',
 	));
-	$wp_customize->add_control( 'ql_content', array(
+	$wp_customize->add_control('ql_content[positiontext]', array(
 		'label'			=> 'Position',
 		'section'		=> 'ql_content',
 		'settings'		=> 'ql_content[positiontext]',
@@ -1340,7 +1330,172 @@ function ql_customize_register( $wp_customize ){
 		))
 	);
 
-    // Line spacing
+	$wp_customize->add_setting( 'ql_content[opacity]', array(
+		'default'		=> QL_CONTENT_OPACITY,
+		'type'			=> 'option',
+		'capability'	=> 'edit_theme_options',
+		'transport'		=> 'postMessage',
+	));
+	$wp_customize->add_control( 'ql_content_opacity', array(
+		'label'			=> 'Content opacity (0-100)',
+		'section'		=> 'ql_content',
+		'settings'		=> 'ql_content[opacity]',
+		'type'			=> 'text',
+	));
+
+    
+	
+	// Content text color
+	
+
+	$wp_customize->add_setting( 'ql_content[headerthreecolor]', array(
+		'default'		=> QL_CONTENT_H3_COLOR,
+		'type'			=> 'option',
+		'capability'	=> 'edit_theme_options',
+		'transport'		=> 'postMessage'
+	));
+	$wp_customize->add_control( new WP_Customize_Color_Control( 
+		$wp_customize, 'ql_headerthreecolor', array(
+			'label'			=> 'H3 Color',
+			'section'		=> 'ql_content',
+			'settings'		=> 'ql_content[headerthreecolor]'
+		))
+	);
+
+	$wp_customize->add_setting( 'ql_content[headerthreesize]', array(
+		'default'		=> QL_CONTENT_H3_FONTSIZE,
+		'type'			=> 'option',
+		'capability'	=> 'edit_theme_options',
+		'transport'		=> 'postMessage'
+	));
+	$wp_customize->add_control( 'ql_headerthreesize', array(
+		'label'			=> 'H3 Font Size',
+		'section'		=> 'ql_content',
+		'settings'		=> 'ql_content[headerthreesize]',
+	));
+
+	$wp_customize->add_setting( 'ql_content[headerthree]', array(
+		'default'		=> 'QL_CONTENT_CONTENTH3FONT',
+		'type'			=> 'option',
+		'capability'	=> 'edit_theme_options'
+	));
+	$wp_customize->add_control( 'ql_headerthree', array(
+		'label'			=> 'H3 Font',
+		'section'		=> 'ql_content',
+		'settings'		=> 'ql_content[headerthree]',
+		'type'			=> 'select',
+		'choices'		=> array(
+			''			=> '-None-',
+			'Abel'			=> 'Abel',
+			'Abril Fatface'		=> 'Abril Fatface',
+			'Actor'			=> 'Actor',
+			'Aldrich'		=> 'Aldrich',
+			'Alegreya SC'		=> 'Alegreya SC',
+			'Alice'			=> 'Alice',
+			'Anaheim'		=> 'Anaheim',
+			'Asul'			=> 'Asul',
+			'BenchNine'		=> 'BenchNine',
+			'Bigelow Rules'		=> 'Bigelow Rules',
+			'Bilbo Swash Caps'	=> 'Bilbo Swash Caps',
+			'Bubbler One'		=> 'Bubbler One',
+			'Cabin'			=> 'Cabin',
+			'Carrois Gothic'	=> 'Carrois Gothic',
+			'Chela One'		=> 'Chela One',
+			'Cherry Cream Soda'	=> 'Cherry Cream Soda',
+			'Coda'			=> 'Coda',
+			'Cousine'		=> 'Cousine',
+			'Ceviche One'		=> 'Ceviche One',
+			'Chewy'			=> 'Chewy',
+			'Creepster'		=> 'Creepster',
+			'Crushed'		=> 'Crushed',
+			'Droid Sans'		=> 'Droid Sans',
+			'Droid Serif'		=> 'Droid Serif',
+			'Droid Sans Mono'	=> 'Droid Sans Mono',
+			'Eagle Lake'		=> 'Eagle Lake',
+			'Electrolize'		=> 'Electrolize',
+                        'Faster One'		=> 'Faster One',
+			'Fenix'			=> 'Fenix',
+			'Flavors'		=> 'Flavors',
+			'Francois One'		=> 'Francois One',
+			'Finger Paint'		=> 'Finger Paint',
+			'Freckle Face'		=> 'Freckle Face',
+			'Fredoka One'		=> 'Fredoka One',
+			'Geo'			=> 'Geo',
+			'Germania One'		=> 'Germania One',
+			'Goblin One'		=> 'Goblin One',
+			'Gilda Display'		=> 'Gilda Display',
+			'Give You Glory'	=> 'Give You Glory',
+			'Glass Antiqua'		=> 'Glass Antiqua',
+			'Happy Monkey'		=> 'Happy Monkey',
+			'Hammersmith One'	=> 'Hammersmith One',
+			'Hanalei'		=> 'Hanalei',
+			'Holtwood One SC'	=> 'Holtwood One SC',
+			'IM Fell Great Primer SC'	=> 'IM Fell Great Primer SC',
+			'Inika'			=> 'Inika',
+			'Istok Web'		=> 'Istok Web',
+			'Josefin Sans'		=> 'Josefin Sans',
+			'Josefin Slab'		=> 'Josefin Slab',
+			'Judson'		=> 'Judson',
+			'Maiden Orange'		=> 'Maiden Orange',
+			'Marck Script'		=> 'Marck Script',
+			'Medula One'		=> 'Medula One',
+			'Merriweather Sans'	=> 'Merriweather Sans',
+			'Merienda One'		=> 'Merienda One',
+			'Metrophobic'		=> 'Metrophobic',
+			'Montserrat Alternates'	=> 'Montserrat Alternates',
+			'Montserrat Subrayada'	=> 'Montserrat Subrayada',
+                        'Mouse Memoirs'		=> 'Mouse Memoirs',
+			'News Cycle'		=> 'News Cycle',
+			'New Rocker'		=> 'New Rocker',
+			'Nothing You Could Do'	=> 'Nothing You Could Do',
+			'Kavoon'		=> 'Kavoon',
+			'Kenia'			=> 'Kenia',
+			'Knewave'		=> 'Knewave',
+                        'Lato'			=> 'Lato',
+			'Limelight'		=> 'Limelight',
+			'Londrina Sketch'	=> 'Londrina Sketch',
+			'Luckiest Guy'		=> 'Luckiest Guy',
+			'Oleo Script'		=> 'Oleo Script',
+			'Ovo'			=> 'Ovo',
+			'Oxygen'		=> 'Oxygen',
+			'Pathway Gothic One'	=> 'Pathway Gothic One',
+			'Poller One'		=> 'Poller One',
+			'Poly'			=> 'Poly',
+			'Port Lligat Slab'	=> 'Port Lligat Slab',
+			'Port Lligat Sans'	=> 'Port Lligat Sans',
+			'Playball'		=> 'Playball',
+			'Playfair Display'	=> 'Playfair Display',
+			'Quattrocento'		=> 'Quattrocento',
+			'Quintessential'	=> 'Quintessential',
+			'Qwigley'		=> 'Qwigley',
+			'Rancho'		=> 'Rancho',
+			'Revalia'		=> 'Revalia',
+                        'Roboto'		=> 'Roboto',
+			'Ropa Sans'		=> 'Ropa Sans',
+			'Rosario'		=> 'Rosario',
+			'Rouge Script'		=> 'Rouge Script',
+			'Risque'		=> 'Risque',
+			'Rufina'		=> 'Rufina',
+			'Tangerine'		=> 'Tangerine',
+			'Trochut'		=> 'Trochut',
+                        'Trykker'		=> 'Trykker',
+                        'The Girl Next Door'	=> 'The Girl Next Door',
+			'Shadows Into Light'	=> 'Shadows Into Light',
+			'Scada'			=> 'Scada',
+			'Sunshiney'		=> 'Sunshiney',
+			'Ubuntu'		=> 'Ubuntu',
+			'Underdog'		=> 'Underdog',
+			'UnifrakturMaguntia'	=> 'UnifrakturMaguntia',
+			'Unkempt'		=> 'Unkempt',
+			'UnifrakturMaguntia'	=> 'UnifrakturMaguntia',
+			'Wallpoet'		=> 'Wallpoet',
+			'Varela'		=> 'Varela',
+			'Vollkorn'		=> 'Vollkorn',
+                        'Yeseva One'		=> 'Yeseva One'
+		)));
+
+
+			// Line spacing
     $wp_customize->add_setting('ql_content[line_spacing]', array(
         'default'       => QL_CONTENT_LINE_SPACING,
         'transport'     => 'postMessage',
@@ -1356,21 +1511,44 @@ function ql_customize_register( $wp_customize ){
             'step'      => 1
         ))
     );
-	
-	// Content text color
-	$wp_customize->add_setting( 'ql_content[opacity]', array(
-		'default'		=> QL_CONTENT_OPACITY,
+
+
+	$wp_customize->add_section( 'ql_emailsign', array(
+		'title'			=> 'Email Signup',
+		'description'	=> 'Email Signup Options',
+		'priority'		=> 36,
+	));
+
+    	$wp_customize->add_setting( 'ql_emailsign[emailtiptext]', array(
+		'default'		=> QL_CONTENT_EMAIL_TIPTEXT,
+		'type'			=> 'option',
+		'capability'	=> 'edit_theme_options',
+		'transport'		=> 'postMessage'
+	));
+	$wp_customize->add_control( 'ql_emailtiptext', array(
+		'label'			=> 'Email Signup Text',
+		'section'		=> 'ql_emailsign',
+		'settings'		=> 'ql_emailsign[emailtiptext]',
+	));
+
+	$wp_customize->add_setting( 'ql_emailsign[emailtipposition]', array(
+		'default'		=> QL_CONTENT_POSITIONEMAIL,
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
 		'transport'		=> 'postMessage',
 	));
-	$wp_customize->add_control( 'ql_content_opacity', array(
-		'label'			=> 'Content opacity (0-100)',
-		'section'		=> 'ql_content',
-		'settings'		=> 'ql_content[opacity]',
-		'type'			=> 'text',
+	$wp_customize->add_control('ql_emailsign[emailtipposition]', array(
+		'label'			=> 'Email Signup Position',
+		'section'		=> 'ql_emailsign',
+		'settings'		=> 'ql_emailsign[emailtipposition]',
+		'type'			=> 'radio',
+		'choices'		=> array(
+			'bottom'=>'Bottom',
+			'belowslider'=>'Below Slider',
+			'both'=>'Both',
+		),
 	));
-	
+
 	// remove static front page section
 	$wp_customize->remove_section('static_front_page');
 	
@@ -1462,6 +1640,12 @@ color:<?php echo $ql_content['color']?$ql_content['color']:QL_CONTENT_COLOR; ?>;
 
  }
 
+#page-content h3{
+	color: <?php echo $ql_content['headerthreecolor']?>;
+	font-size:<?php echo $ql_content['headerthreesize']?>px;
+	font-family:'<?php echo $ql_content['headerthree']?>';
+}
+
 
 #content p {
 font-family: '<?php echo $ql_content['fontinfoa']?$ql_content['fontinfoa']:QL_CONTENT_CONTENTFONT; ?>';
@@ -1488,8 +1672,8 @@ add_action( 'wp_head', 'ql_customize_css');
 
 function ql_enqueue_scripts(){
 	wp_enqueue_script(
-		'coin-slider',
-		get_template_directory_uri(). '/add-on/slider/coin-slider.min.js',
+		'flex-slider',
+		get_template_directory_uri(). '/js/jquery.flexslider-min.js',
 		array('jquery')
 	);
 }
@@ -1500,7 +1684,6 @@ add_action('wp_enqueue_scripts', 'ql_enqueue_scripts');
 function ql_customize_preview() {
 	?>
 	<script type="text/javascript">
-		
 	/**
 	 * @credit http://papermashup.com/read-url-get-variables-withjavascript/
 	 */
@@ -1512,8 +1695,6 @@ function ql_customize_preview() {
 		});
 		return val;
 	}
-	
-	
 	( function( $ ){		
 		/**
 		 * Set social network icon links
@@ -1528,25 +1709,7 @@ function ql_customize_preview() {
 			}
 		}
 		
-		
-		// content color settings
-		wp.customize('ql_content[color]',function( value ) {
-			value.bind(function(to) {
-				$('#page-content').css('color', to);
-			});
-
 		// content font-family settings
-		wp.customize('ql_content[positiontext]',function( value ) {
-			value.bind(function(to) {
-				$('#page-content').css('text-align', to);
-			  
-                           
-
-
-    });
-		
-
-});
 		
 		// position
 		wp.customize('ql_layout[position]', function (value){
@@ -1665,29 +1828,6 @@ function ql_customize_preview() {
 		});
 		
 		
-		// set or remove slider image
-		function sliderImage(id, url){
-			if(url.length != 0){
-				if($('#slider-image-'+id).length > 0){
-					$('#slider-image-'+id).attr('src', url);
-				}else{
-					$('#coin-slider').append('<img id="slider-image-'+id+'" src="'+url+'" />');
-				}
-			}else{
-				$('#slider-image-'+id).remove();
-			}
-			
-			// restart coinslider
-			$('#coin-slider').coinslider({width:468, links:false});
-		}
-	
-		// Slider
-		wp.customize('ql_widgets[slider]', function (value){ value.bind(function(to){ if(to) $('#image-slider').show(); else $('#image-slider').hide(); }); });
-		wp.customize('ql_widgets[slider_image_1]', function (value){ value.bind(function(to){ sliderImage(1, to); }); });
-		wp.customize('ql_widgets[slider_image_2]', function (value){ value.bind(function(to){ sliderImage(2, to); }); });
-		wp.customize('ql_widgets[slider_image_3]', function (value){ value.bind(function(to){ sliderImage(3, to); }); });
-		wp.customize('ql_widgets[slider_image_4]', function (value){ value.bind(function(to){ sliderImage(4, to); }); });
-		
 		// wordpress widgets
 		wp.customize('ql_widgets[wordpress]', function (value){
 			value.bind(function(to){
@@ -1753,42 +1893,6 @@ function ql_customize_preview() {
 					$('#email').show();
 				}
 			});
-		});
-		
-		
-		/**
-		 * Parse plain text to html
-		 */
-		function parseContent(content){
-			// parse links
-			var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-			content = content.replace(exp,"<a href='$1'>$1</a>");
-			
-			// add html p tags
-			content = '<p>'+content;
-			content = content.replace(/\n/g, '</p><p>');
-			content += '</p>';
-			
-			return content;
-		}
-		
-		// Content
-		
-             
-
-                wp.customize('ql_content[content]', function (value){
-			value.bind(function(to){
-				$('#page-content').html(parseContent(to));
-			
-
-});
-
-  
-
-
-
-
-
 		});
 		
 	} )( jQuery)
