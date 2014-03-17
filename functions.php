@@ -624,6 +624,7 @@ function ql_customize_register( $wp_customize ){
 			'Londrina Sketch'	=> 'Londrina Sketch',
 			'Luckiest Guy'		=> 'Luckiest Guy',
 			'Oleo Script'		=> 'Oleo Script',
+			'Oswald'		=> 'Oswald',
 			'Ovo'			=> 'Ovo',
 			'Oxygen'		=> 'Oxygen',
 			'Pathway Gothic One'	=> 'Pathway Gothic One',
