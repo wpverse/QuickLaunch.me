@@ -747,6 +747,7 @@ function ql_customize_register( $wp_customize ){
 			'Londrina Sketch'	=> 'Londrina Sketch',
 			'Luckiest Guy'		=> 'Luckiest Guy',
 			'Oleo Script'		=> 'Oleo Script',
+			'Oswald'		=> 'Oswald',
 			'Ovo'			=> 'Ovo',
 			'Oxygen'		=> 'Oxygen',
 			'Pathway Gothic One'	=> 'Pathway Gothic One',
@@ -951,6 +952,7 @@ function ql_customize_register( $wp_customize ){
 			'blue'	=> 'Blue',
 			'green'	=> 'Green',
 			'red'	=> 'Red',
+			'orange'	=> 'Orange',
 		),
 		'priority'		=> 3,
 	));
@@ -1248,6 +1250,7 @@ function ql_customize_register( $wp_customize ){
 			'Londrina Sketch'	=> 'Londrina Sketch',
 			'Luckiest Guy'		=> 'Luckiest Guy',
 			'Oleo Script'		=> 'Oleo Script',
+			'Oswald'		=> 'Oswald',
 			'Ovo'			=> 'Ovo',
 			'Oxygen'		=> 'Oxygen',
 			'Pathway Gothic One'	=> 'Pathway Gothic One',
@@ -1456,6 +1459,7 @@ function ql_customize_register( $wp_customize ){
 			'Londrina Sketch'	=> 'Londrina Sketch',
 			'Luckiest Guy'		=> 'Luckiest Guy',
 			'Oleo Script'		=> 'Oleo Script',
+			'Oswald'		=> 'Oswald',
 			'Ovo'			=> 'Ovo',
 			'Oxygen'		=> 'Oxygen',
 			'Pathway Gothic One'	=> 'Pathway Gothic One',
@@ -1900,5 +1904,11 @@ function ql_customize_preview() {
 	<?php 
 } 
 
+add_shortcode("cta","show_cta_button");
+
+
+function show_cta_button($atts){
+	return '<a href="'.$atts["link"].'" style="text-decoration:none"><input type="button" value="'.$atts["name"].'" name="" class="btn '.$atts["color"].'"></a>';
+}
 
 ?>

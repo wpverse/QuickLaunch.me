@@ -156,6 +156,23 @@ input[type=text] {
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 
+.btn.orange {
+  background-color: #f79b21;
+  background-repeat: repeat-x;
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#f7d115), to(#f79b21));
+  background-image: -moz-linear-gradient(top, #f7d115, #f79b21);
+  background-image: -ms-linear-gradient(top, #f7d115, #f79b21);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f7d115), color-stop(100%, #f79b21));
+  background-image: -webkit-linear-gradient(top, #f7d115, #f79b21);
+  background-image: -o-linear-gradient(top, #f7d115, #f79b21);
+  background-image: linear-gradient(top, #f7d115, #f79b21);
+  color: #fff;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f7d115', endColorstr='#f79b21', GradientType=0);
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  border-color: #f79b21 #f79b21 #882a25;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
+
 /* Toolbox */
 .hidden {
 	display: none;

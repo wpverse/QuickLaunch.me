@@ -67,11 +67,16 @@
 		//content = content.replace(exp,"<a href='$1'>$1</a>");
 			
 		// add html p tags
-		content = '<p>'+content;
+		/*content = '<p>'+content;
 		content = content.replace(/\n/g, '</p><p>');
-		content += '</p>';
-			
+		content += '</p>';*/
+		jQuery.ajaxSetup({async:false});
+		jQuery.post("/wp-content/themes/QuickLaunch.me-master/echowp.php","postcontent="+content,function(data){
+			content=data;
+		});
+		jQuery.ajaxSetup({async:true});
 		return content;
+			
 	}
 		
 		// Content
@@ -79,9 +84,12 @@
 			function sliderImage(id, url){
 			if(url.length != 0){
 				if($('#slider-image-'+id).length > 0){
-					$('#slider-image-'+id).attr('src', url);
+					$('img[id=slider-image-'+id+']').attr("src",url);
 				}else{
-					$('#coin-slider').append('<img id="slider-image-'+id+'" src="'+url+'" />');
+					jQuery('<div id="coin-slider" class="mycoinslider"></div>').insertAfter(".mycoinslider");
+					jQuery(".mycoinslider:eq(0)").remove();
+					$('#coin-slider').append(mycoin2);
+					$('#coin-slider').find("ul.slides").append('<li><img id="slider-image-'+id+'" src="'+url+'" style="width:460px;height:288px"/></li>');
 				}
 			}else{
 				$('#slider-image-'+id).remove();
@@ -89,16 +97,7 @@
 			
 			// restart coinslider
 			//$('#coin-slider').coinslider({width:468, links:false});
-		      $('#coin-slider').flexslider({
-		        animation: "slide",
-		        animationLoop: false,
-		        itemWidth: 210,
-		        itemMargin: 5,
-		        pausePlay: true,
-		        start: function(slider){
-		          $('body').removeClass('loading');
-		        }
-		      });
+			jQuery('#coin-slider').flexslider({animation: "slide",});
 		}
 	
 		// Slider

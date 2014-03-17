@@ -35,7 +35,7 @@ $ql_title_tagline = get_option('ql_title_tagline');
 		
 		<!-- Image slider -->
 		<section id="image-slider" class="<?php echo $ql_widgets['slider']?'':'hidden'; ?>">
-			<div id="coin-slider">
+			<div id="coin-slider" class="mycoinslider">
 				<ul class="slides">
 				<?php if($ql_widgets['slider_image_1']): ?>
 				<li><img id="slider-image-1" src="<?php echo $ql_widgets['slider_image_1'] ?>" style="width:100%;" /></li>
@@ -51,6 +51,7 @@ $ql_title_tagline = get_option('ql_title_tagline');
 				<?php endif; ?>
 				</ul>
 			</div>
+		</section>
 			<?php if($ql_widgets['email'] || !is_admin()): ?>
 			<div id="email" class="email-top <?php echo (($ql_widgets['email'] && !$ql_widgets['mailchimp']) && ($ql_emailsign['emailtipposition']=='belowslider' || $ql_emailsign['emailtipposition']=='both'))?'':'hidden'; ?>">
 				<form action="" method="post" class="newsletter-form">
@@ -64,7 +65,6 @@ $ql_title_tagline = get_option('ql_title_tagline');
 				<?php the_widget('NS_Widget_MailChimp', array('signup_text'=>'Submit')); ?>
 			</div>
 			<?php endif; ?>
-		</section>
 		<!-- End Image slider -->
 		
 		<?php

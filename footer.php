@@ -12,6 +12,7 @@ $ql_title_tagline = get_option('ql_title_tagline');
 <?php if ( ql_is_personalizing() ): get_template_part('template-admin-palette'); endif; ?>
 	<script src="http://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js"></script>
 	<script type="text/javascript">
+		var mycoin2="";
 			<?php if($ql_title_tagline['font']): ?>
 			WebFont.load({
 				google: {
@@ -32,6 +33,7 @@ $ql_title_tagline = get_option('ql_title_tagline');
 			jQuery(function(){
 				//jQuery('#coin-slider').coinslider({width:468, links:false, navigation:false});
 			jQuery("document").ready(function(){
+				mycoin2=jQuery('#coin-slider ul.slides').clone();
 				jQuery('#coin-slider').flexslider({
 				        animation: "slide",
 		      		});
