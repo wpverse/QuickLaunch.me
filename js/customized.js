@@ -89,7 +89,7 @@
 					jQuery('<div id="coin-slider" class="mycoinslider"></div>').insertAfter(".mycoinslider");
 					jQuery(".mycoinslider:eq(0)").remove();
 					$('#coin-slider').append(mycoin2);
-					$('#coin-slider').find("ul.slides").append('<li><img id="slider-image-'+id+'" src="'+url+'" style="width:460px;height:288px"/></li>');
+					$('#coin-slider').find("ul.slides").append('<li><img id="slider-image-'+id+'" src="'+url+'" style="max-width:460px;height:288px"/></li>');
 				}
 			}else{
 				$('#slider-image-'+id).remove();

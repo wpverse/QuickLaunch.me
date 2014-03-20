@@ -32,7 +32,7 @@ function ql_apply_styles()
 	}
 	#wrap {
 		padding: <?php echo $content_padding ?>px;
-		width: <?php echo $content_width ?>px;
+		max-width: <?php echo $content_width ?>px;
 	}
 	</style>
 	<!-- End Personalization options -->
