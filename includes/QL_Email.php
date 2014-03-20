@@ -280,7 +280,8 @@ class QL_Email
 			$site = get_bloginfo('title');
 			$subject = 'New Email Sign-up at '. $site;
 			$body = 'You have a new email sign-up: '.$email.' ';			
-			$emailfrom = get_bloginfo('admin_email');
+			//$emailfrom = get_bloginfo('admin_email');
+			$emailfrom = get_bloginfo('name');
 			$headers = 'From: <'.$emailfrom.'>\r\n';
 			write_log('print_r $email:');
 			write_log($email);
@@ -293,8 +294,8 @@ class QL_Email
 			write_log('--headers:');
 			write_log($headers);
 			//$headers = '';// empty for troubleshooting
-			$sent = wp_mail( $to, $subject, $body, $headers, $attachments );
-			$phpsent = mail($to, $subject, $body);
+			//$sent = wp_mail( $to, $subject, $body, $headers, $attachments );
+			$phpsent = mail($to, $subject, $body, $headers );
 			write_log('sent?:');
 			if ($sent == true){
 				write_log('email sent!:');
