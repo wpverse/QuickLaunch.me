@@ -279,7 +279,7 @@ class QL_Email
 			$to = rtrim($to, ",");
 			$site = get_bloginfo('title');
 			$subject = 'New Email Sign-up at '. $site;
-			$body = 'You have a new email sign-up at 'get_bloginfo('name').
+			$body = 'You have a new email sign-up at '.get_bloginfo('name').'.  ';
 			$body .= 'New subscription: '.$email.' ';			
 			//$emailfrom = get_bloginfo('admin_email');
 			//$emailfrom = get_bloginfo('name');
