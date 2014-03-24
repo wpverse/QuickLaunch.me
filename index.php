@@ -11,13 +11,18 @@ $ql_title_tagline = get_option('ql_title_tagline');
 	
 		<!-- Page Header -->
 		<header>
-		<?php if (isset($ql_title_tagline['logo'])){ ?>
+		<?php if (strlen($ql_title_tagline['logo'] > 0 ) ){ ?>
 			<div id="site-logo" class="">
+		<!-- logo setting: <?php print_r($ql_title_tagline['logo']);
+		echo 'strlen:';
+		echo strlen($ql_title_tagline['logo']); ?> -->			
 				<img src="<?php echo $ql_title_tagline['logo']; ?>" />
 			</div>
 		<?php } ?>
 			<div id="site-title-and-desc" class="">
-		<?php if (!isset($ql_title_tagline['logo'])){ ?>
+		<?php if ( strlen($ql_title_tagline['logo'] == 0 ) ){ ?>
+		<!-- no logo -->
+
 				<h1 id="site-title"><?php echo stripslashes(get_bloginfo('title')) ?></h1>
 		<?php } ?>
 				<h2 id="site-desc"><?php echo stripslashes(get_bloginfo('description')) ?></h2>
