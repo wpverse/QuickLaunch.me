@@ -479,4 +479,18 @@ footer{
 	display:block;
 	position:relative;
 }
+#site-logo {
+width:100%;
+text-align:center;
+}
+
+#site-logo img{
+	max-width:80%;
+	height:auto;
+	margin-left:auto;
+	margin-right:auto;
+	text-align:center;
+}
+
+
 
