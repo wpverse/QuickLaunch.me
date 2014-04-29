@@ -52,7 +52,7 @@ class QL_Email
 	 */
 	public function __construct()
 	{
-	
+
 	}
 	
 	/**
@@ -64,7 +64,7 @@ class QL_Email
 	 */
 	public static function csv()
 	{
-	
+
 		$out = '';
 		
 		$emails = self::get_all();
@@ -74,7 +74,7 @@ class QL_Email
 		}
 		
 		return $out;
-	
+
 	}
 	
 	/**
@@ -131,16 +131,16 @@ class QL_Email
 	 */
 	public static function delete()
 	{
-	
+
 		global $wpdb;
-	
+
 		$in_ids = func_get_args();
 		$in_ids = implode(',', $in_ids);
 		$max_num = func_num_args();
 		
 		$table = $wpdb->prefix . 'quicklaunch_emails';
 		$wpdb->query("DELETE FROM $table WHERE id IN($in_ids) LIMIT $max_num");
-	
+
 	}
 	
 	/**
@@ -154,9 +154,9 @@ class QL_Email
 	 */
 	public function validate()
 	{
-	
+
 		$errors = array();
-	
+
 		if ( empty($this->email) )
 		{
 			$errors['email'][] = 'Email address is empty';
@@ -165,7 +165,7 @@ class QL_Email
 		{
 			if ( ! filter_var($this->email, FILTER_VALIDATE_EMAIL) )
 			{
-			
+
 				$errors['email'][] = 'Invalid email address.';
 				
 			}
@@ -193,7 +193,7 @@ class QL_Email
 		}
 		
 		return $errors;
-	
+
 	}
 	
 	/**
@@ -213,7 +213,7 @@ class QL_Email
 		$data = array(
 			'email' => $this->email,
 			'ip' => $this->ip
-		);
+			);
 		$data_format = array('%s','%s');
 		
 		if ( $this->id )
@@ -249,8 +249,67 @@ class QL_Email
 			}
 			
 		}
-		
+		reg_alert($this->email);
 	}
 	
 }
-?>
+
+	/**
+	 * Email alert send to all admins on registration of new email address
+	 *
+	 * @return
+	 * @since 1.0
+	 */
+
+	function reg_alert($email) {
+		$to ='';
+		$subject ='';
+		$emailfrom ='';
+		$headers ='';
+		$sent ='';
+		$attachments='';
+		$user_query = new WP_User_Query( array( 'role' => 'Administrator' ) );
+		if ( ! empty( $user_query->results ) ) {
+			foreach ( $user_query->results as $user ) {
+				write_log('$user->user_email:');
+				write_log($user->user_email);
+				$to .= $user->user_email.',';
+
+			}
+			$to = rtrim($to, ",");
+			$site = get_bloginfo('title');
+			$subject = 'New Email Sign-up at '. $site;
+			$body = 'You have a new email sign-up at '.get_bloginfo('name').'.  ';
+			$body .= 'New subscription: '.$email.' ';			
+			//$emailfrom = get_bloginfo('admin_email');
+			//$emailfrom = get_bloginfo('name');
+			//$headers = 'From: <'.$emailfrom.'>\r\n';
+			write_log('print_r $email:');
+			write_log($email);
+			write_log('--$to:');
+			write_log($to);
+			write_log('--$subject:');
+			write_log($subject);
+			write_log('--$body:');
+			write_log($body);
+			write_log('--headers:');
+			write_log($headers);
+			//$headers = '';// empty for troubleshooting
+			//$sent = wp_mail( $to, $subject, $body, $headers, $attachments );
+			$phpsent = mail($to, $subject, $body, $headers );
+			write_log('sent?:');
+			if ($sent == true){
+				write_log('email sent!:');
+				write_log($sent);
+			} else {
+				write_log('email send failed');
+			}
+			if ($phpsent == true){
+				write_log('email $phpsent!:');
+				write_log($phpsent);
+			} else {
+				write_log('email $phpsent failed');
+			}
+		}
+	} 
+	?>

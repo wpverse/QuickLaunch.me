@@ -9,6 +9,18 @@
  * @author brux <brux.romuar@gmail.com>
  */
 
+if (!function_exists('write_log')) {
+    function write_log ( $log )  {
+        if ( true === WP_DEBUG ) {
+            if ( is_array( $log ) || is_object( $log ) ) {
+                error_log( print_r( $log, true ) );
+            } else {
+                error_log( $log );
+            }
+        }
+    }
+}
+
 require_once TEMPLATEPATH . '/includes/QL_JSONResponse.php';
 require_once TEMPLATEPATH . '/includes/QL_Email.php';
 require_once TEMPLATEPATH . '/includes/admin.php';
@@ -91,7 +103,7 @@ add_option('ql-btn-color', 'gray');
  */
 function ql_init()
 {
-
+	session_start();
 	// If we are Personalizing the theme, set a flag.
 	if ( isset($_GET['personalize']) && current_user_can('edit_theme_options') )
 	{
@@ -180,7 +192,7 @@ function ql_bottom_nav()
  */
 function ql_admin_bar()
 {
-
+	global $post;
 	if ( current_user_can('edit_theme_options') && ! ql_is_personalizing() )
 	{
 		
@@ -192,7 +204,7 @@ function ql_admin_bar()
 		$wp_admin_bar->add_menu(array(
 			'id' => 'ql-personalize',
 			'title' => 'Customize',
-			'href' => get_bloginfo('url') . '/wp-admin/customize.php'
+			'href' => get_bloginfo('url') . '/wp-admin/customize.php?page_edit_id='.((is_front_page())?0:$post->ID),
 		));
 		
 	}
@@ -311,6 +323,7 @@ function ql_customize_register( $wp_customize ){
 				<span class="customize-control-title"><?php echo esc_html($this->label); ?></span>
 				<textarea rows="25" style="width:100%;" <?php echo $this->link(); ?>><?php echo esc_textarea($this->value()); ?></textarea>
 			</label>
+			<p><i>Tip: You can use &lt;p&gt; and &lt;/p&gt; to wrap paragraphs precisely</i></p>
 			<?php
 		}
 	}
@@ -343,7 +356,13 @@ function ql_customize_register( $wp_customize ){
 		}
 	}
 	
-	
+	$myglobal_post_id="";
+	if(isset($_REQUEST["page_edit_id"])):
+		$_SESSION["postid"]=$_REQUEST["page_edit_id"];
+	endif;
+	if(isset($_SESSION["postid"]))
+		$myglobal_post_id=$_SESSION["postid"];
+
 	// social links
 	$wp_customize->add_section( 'ql_social', array(
 		'title'			=> 'Social Networks',
@@ -352,7 +371,7 @@ function ql_customize_register( $wp_customize ){
 	));
 	
 	// Twitter
-	$wp_customize->add_setting( 'ql_social[twitter]', array(
+	$wp_customize->add_setting( 'ql_social_'.$myglobal_post_id.'[twitter]', array(
 		'default'		=> '',
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -361,12 +380,12 @@ function ql_customize_register( $wp_customize ){
 	$wp_customize->add_control( 'ql_social_twitter', array(
 		'label'			=> 'Twitter',
 		'section'		=> 'ql_social',
-		'settings'		=> 'ql_social[twitter]',
+		'settings'		=> 'ql_social_'.$myglobal_post_id.'[twitter]',
 		'type'			=> 'text',
 	));
 	
 	// facebook
-	$wp_customize->add_setting( 'ql_social[facebook]', array(
+	$wp_customize->add_setting( 'ql_social_'.$myglobal_post_id.'[facebook]', array(
 		'default'		=> '',
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -375,12 +394,12 @@ function ql_customize_register( $wp_customize ){
 	$wp_customize->add_control( 'ql_social_facebook', array(
 		'label'			=> 'Facebook',
 		'section'		=> 'ql_social',
-		'settings'		=> 'ql_social[facebook]',
+		'settings'		=> 'ql_social_'.$myglobal_post_id.'[facebook]',
 		'type'			=> 'text',
 	));
 	
 	// LinkedIn
-	$wp_customize->add_setting( 'ql_social[linkedin]', array(
+	$wp_customize->add_setting( 'ql_social_'.$myglobal_post_id.'[linkedin]', array(
 		'default'		=> '',
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -389,12 +408,12 @@ function ql_customize_register( $wp_customize ){
 	$wp_customize->add_control( 'ql_social_linkedin', array(
 		'label'			=> 'LinkedIn',
 		'section'		=> 'ql_social',
-		'settings'		=> 'ql_social[linkedin]',
+		'settings'		=> 'ql_social_'.$myglobal_post_id.'[linkedin]',
 		'type'			=> 'text',
 	));
 	
 	// Google plus
-	$wp_customize->add_setting( 'ql_social[googleplus]', array(
+	$wp_customize->add_setting( 'ql_social_'.$myglobal_post_id.'[googleplus]', array(
 		'default'		=> '',
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -403,12 +422,12 @@ function ql_customize_register( $wp_customize ){
 	$wp_customize->add_control( 'ql_social_googleplus', array(
 		'label'			=> 'Google +',
 		'section'		=> 'ql_social',
-		'settings'		=> 'ql_social[googleplus]',
+		'settings'		=> 'ql_social_'.$myglobal_post_id.'[googleplus]',
 		'type'			=> 'text',
 	));
 	
 	// youtube
-	$wp_customize->add_setting( 'ql_social[youtube]', array(
+	$wp_customize->add_setting( 'ql_social_'.$myglobal_post_id.'[youtube]', array(
 		'default'		=> '',
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -417,7 +436,7 @@ function ql_customize_register( $wp_customize ){
 	$wp_customize->add_control( 'ql_social_youtube', array(
 		'label'			=> 'Youtube',
 		'section'		=> 'ql_social',
-		'settings'		=> 'ql_social[youtube]',
+		'settings'		=> 'ql_social_'.$myglobal_post_id.'[youtube]',
 		'type'			=> 'text',
 	));
 	
@@ -432,7 +451,7 @@ function ql_customize_register( $wp_customize ){
 	));
 	
 	// Position
-	$wp_customize->add_setting( 'ql_layout[position]', array(
+	$wp_customize->add_setting( 'ql_layout_'.$myglobal_post_id.'[position]', array(
 		'default'		=> QL_LAYOUT_POSITION,
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -441,7 +460,7 @@ function ql_customize_register( $wp_customize ){
 	$wp_customize->add_control( 'ql_position', array(
 		'label'			=> 'Position',
 		'section'		=> 'ql_layout',
-		'settings'		=> 'ql_layout[position]',
+		'settings'		=> 'ql_layout_'.$myglobal_post_id.'[position]',
 		'type'			=> 'radio',
 		'choices'		=> array(
 			'left'=>'Left',
@@ -451,7 +470,7 @@ function ql_customize_register( $wp_customize ){
 	));
 	
 	// Padding
-	$wp_customize->add_setting( 'ql_layout[padding]', array(
+	$wp_customize->add_setting( 'ql_layout_'.$myglobal_post_id.'[padding]', array(
 		'default'		=> QL_LAYOUT_PADDING,
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -460,11 +479,11 @@ function ql_customize_register( $wp_customize ){
 	$wp_customize->add_control( 'ql_padding', array(
 		'label'			=> 'Padding',
 		'section'		=> 'ql_layout',
-		'settings'		=> 'ql_layout[padding]',
+		'settings'		=> 'ql_layout_'.$myglobal_post_id.'[padding]',
 	));
 	
 	// Rounded box background
-	$wp_customize->add_setting( 'ql_layout[roundness]', array(
+	$wp_customize->add_setting( 'ql_layout_'.$myglobal_post_id.'[roundness]', array(
 		'default'		=> QL_LAYOUT_ROUNDNESS,
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -473,12 +492,12 @@ function ql_customize_register( $wp_customize ){
 	$wp_customize->add_control( 'ql_roundness', array(
 		'label'			=> 'Corner Roundness',
 		'section'		=> 'ql_layout',
-		'settings'		=> 'ql_layout[roundness]',
+		'settings'		=> 'ql_layout_'.$myglobal_post_id.'[roundness]',
 		'type'			=> 'text',
 	));
 	
 	// Box shadow
-	$wp_customize->add_setting( 'ql_layout[boxShadow]', array(
+	$wp_customize->add_setting( 'ql_layout_'.$myglobal_post_id.'[boxShadow]', array(
 		'default'		=> QL_LAYOUT_BOX_SHADOW,
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -487,7 +506,7 @@ function ql_customize_register( $wp_customize ){
 	$wp_customize->add_control( 'ql_boxShadow', array(
 		'label'			=> 'Box Shadow',
 		'section'		=> 'ql_layout',
-		'settings'		=> 'ql_layout[boxShadow]',
+		'settings'		=> 'ql_layout_'.$myglobal_post_id.'[boxShadow]',
 		'type'			=> 'text',
 	));
 	
@@ -499,16 +518,16 @@ function ql_customize_register( $wp_customize ){
 
 	
 	// Position
-	$wp_customize->add_setting( 'ql_title_tagline[postitleinfo]', array(
+	$wp_customize->add_setting( 'ql_title_tagline_'.$myglobal_post_id.'[postitleinfo]', array(
 		'default'		=> QL_CONTENT_POSTITLEINFO,
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
 		'transport'		=> 'postMessage',
 	));
-	$wp_customize->add_control( 'ql_title_tagline[postitleinfo]', array(
+	$wp_customize->add_control( 'ql_title_tagline_'.$myglobal_post_id.'[postitleinfo]', array(
 		'label'			=> 'Position Tagline',
 		'section'		=> 'title_tagline',
-		'settings'		=> 'ql_title_tagline[postitleinfo]',
+		'settings'		=> 'ql_title_tagline_'.$myglobal_post_id.'[postitleinfo]',
 		'type'			=> 'radio',
 		'choices'		=> array(
 			'left'=>'Left',
@@ -520,15 +539,15 @@ function ql_customize_register( $wp_customize ){
 	));
 
 	 // Position
-	$wp_customize->add_setting( 'ql_title_tagline[postitle]', array(
+	$wp_customize->add_setting( 'ql_title_tagline_'.$myglobal_post_id.'[postitle]', array(
 		'default'		=> QL_CONTENT_POSTITLE,
 		'type'			=> 'option',
 		'transport'		=> 'postMessage',
 	));
-	$wp_customize->add_control( 'ql_title_tagline[postitle]', array(
+	$wp_customize->add_control( 'ql_title_tagline_'.$myglobal_post_id.'[postitle]', array(
 		'label'			=> 'Position Title',
 		'section'		=> 'title_tagline',
-		'settings'		=> 'ql_title_tagline[postitle]',
+		'settings'		=> 'ql_title_tagline_'.$myglobal_post_id.'[postitle]',
 		'type'			=> 'radio',
 		'choices'		=> array(
 			'left'=>'Left',
@@ -542,15 +561,15 @@ function ql_customize_register( $wp_customize ){
 
 
 		// Heading font family
-	$wp_customize->add_setting( 'ql_title_tagline[font]', array(
+	$wp_customize->add_setting( 'ql_title_tagline_'.$myglobal_post_id.'[font]', array(
 		'default'		=> 'QL_TITLE_TAGLINE_FONT',
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
 	));
-	$wp_customize->add_control( 'ql_title_tagline[font]', array(
+	$wp_customize->add_control( 'ql_title_tagline_'.$myglobal_post_id.'[font]', array(
 		'label'			=> 'Title Font',
 		'section'		=> 'title_tagline',
-		'settings'		=> 'ql_title_tagline[font]',
+		'settings'		=> 'ql_title_tagline_'.$myglobal_post_id.'[font]',
 		'type'			=> 'select',
 		'choices'		=> array(
 			''			=> '-None-',
@@ -624,6 +643,7 @@ function ql_customize_register( $wp_customize ){
 			'Londrina Sketch'	=> 'Londrina Sketch',
 			'Luckiest Guy'		=> 'Luckiest Guy',
 			'Oleo Script'		=> 'Oleo Script',
+			'Oswald'		=> 'Oswald',
 			'Ovo'			=> 'Ovo',
 			'Oxygen'		=> 'Oxygen',
 			'Pathway Gothic One'	=> 'Pathway Gothic One',
@@ -665,15 +685,15 @@ function ql_customize_register( $wp_customize ){
 	));
 	
 // Heading font family
-	$wp_customize->add_setting( 'ql_title_tagline[fontinfo]', array(
+	$wp_customize->add_setting( 'ql_title_tagline_'.$myglobal_post_id.'[fontinfo]', array(
 		'default'		=> 'QL_TITLE_TAGLINE_FONTINFO',
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
 	));
-	$wp_customize->add_control( 'ql_title_tagline[fontinfo]', array(
+	$wp_customize->add_control( 'ql_title_tagline_'.$myglobal_post_id.'[fontinfo]', array(
 		'label'			=> 'Tagline Font',
 		'section'		=> 'title_tagline',
-		'settings'		=> 'ql_title_tagline[fontinfo]',
+		'settings'		=> 'ql_title_tagline_'.$myglobal_post_id.'[fontinfo]',
 		'type'			=> 'select',
 		'choices'		=> array(
 			''			=> '-None-',
@@ -747,6 +767,7 @@ function ql_customize_register( $wp_customize ){
 			'Londrina Sketch'	=> 'Londrina Sketch',
 			'Luckiest Guy'		=> 'Luckiest Guy',
 			'Oleo Script'		=> 'Oleo Script',
+			'Oswald'		=> 'Oswald',
 			'Ovo'			=> 'Ovo',
 			'Oxygen'		=> 'Oxygen',
 			'Pathway Gothic One'	=> 'Pathway Gothic One',
@@ -787,7 +808,7 @@ function ql_customize_register( $wp_customize ){
 	));
 
     // Title bottom margin
-    $wp_customize->add_setting('ql_title_tagline[title_margin]', array(
+    $wp_customize->add_setting('ql_title_tagline_'.$myglobal_post_id.'[title_margin]', array(
         'default'       => QL_TITLE_BOTTOM_MARGIN,
         'transport'     => 'postMessage',
         'type'          => 'option',
@@ -796,7 +817,7 @@ function ql_customize_register( $wp_customize ){
     $wp_customize->add_control(new QL_Slider_Control($wp_customize, 'ql_title_bottom_margin', array(
             'label'     => 'Title Bottom Margin',
             'section'   => 'title_tagline',
-            'settings'  => 'ql_title_tagline[title_margin]',
+            'settings'  => 'ql_title_tagline_'.$myglobal_post_id.'[title_margin]',
             'min'       => 0,
             'max'       => 100,
             'step'      => 1,
@@ -804,7 +825,7 @@ function ql_customize_register( $wp_customize ){
         ))
     );
     // Tagline bottom margin (Header bottom margin)
-    $wp_customize->add_setting('ql_title_tagline[header_bottom_margin]', array(
+    $wp_customize->add_setting('ql_title_tagline_'.$myglobal_post_id.'[header_bottom_margin]', array(
         'default'       => QL_HEADER_BOTTOM_MARGIN,
         'transport'     => 'postMessage',
         'type'          => 'option',
@@ -813,7 +834,7 @@ function ql_customize_register( $wp_customize ){
     $wp_customize->add_control(new QL_Slider_Control($wp_customize, 'ql_header_bottom_margin', array(
             'label'     => 'Tagline Bottom Margin',
             'section'   => 'title_tagline',
-            'settings'  => 'ql_title_tagline[header_bottom_margin]',
+            'settings'  => 'ql_title_tagline_'.$myglobal_post_id.'[header_bottom_margin]',
             'min'       => 0,
             'max'       => 100,
             'step'      => 1,
@@ -823,7 +844,7 @@ function ql_customize_register( $wp_customize ){
 
 
     // Heading text color
-	$wp_customize->add_setting( 'ql_title_tagline[title_color]', array(
+	$wp_customize->add_setting( 'ql_title_tagline_'.$myglobal_post_id.'[title_color]', array(
 		'default'		=> QL_TITLE_TAGLINE_TITLE_COLOR,
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -833,13 +854,13 @@ function ql_customize_register( $wp_customize ){
 		$wp_customize, 'ql_title_tagline_title_color', array(
 			'label'			=> 'Title Color',
 			'section'		=> 'title_tagline',
-			'settings'		=> 'ql_title_tagline[title_color]',
+			'settings'		=> 'ql_title_tagline_'.$myglobal_post_id.'[title_color]',
 		'priority'		=> '17'
 		))
 	);
 
         //Tagline text color
-	$wp_customize->add_setting( 'ql_title_tagline[title_colorinfo]', array(
+	$wp_customize->add_setting( 'ql_title_tagline_'.$myglobal_post_id.'[title_colorinfo]', array(
 		'default'		=> QL_TITLE_TAGLINE_TITLE_COLORINFO,
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -849,13 +870,13 @@ function ql_customize_register( $wp_customize ){
 		$wp_customize, 'ql_title_tagline_title_colorinfo', array(
 			'label'			=> 'Tagline Color',
 			'section'		=> 'title_tagline',
-			'settings'		=> 'ql_title_tagline[title_colorinfo]',
+			'settings'		=> 'ql_title_tagline_'.$myglobal_post_id.'[title_colorinfo]',
 		'priority'		=> '18'
 		))
 	);
 
 	// Logo
-	$wp_customize->add_setting( 'ql_title_tagline[logo]', array(
+	$wp_customize->add_setting( 'ql_title_tagline_'.$myglobal_post_id.'[logo]', array(
 		'default'		=> '',
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -865,7 +886,7 @@ function ql_customize_register( $wp_customize ){
 		$wp_customize, 'ql_title_tagline_logo', array(
 			'label'			=> 'Logo',
 			'section'		=> 'title_tagline',
-			'settings'		=> 'ql_title_tagline[logo]',
+			'settings'		=> 'ql_title_tagline_'.$myglobal_post_id.'[logo]',
 		'priority'		=> '19'
 		))
 	);
@@ -881,7 +902,7 @@ function ql_customize_register( $wp_customize ){
 	));
 	
 	// Footer content
-	$wp_customize->add_setting( 'ql_footer[content]', array(
+	$wp_customize->add_setting( 'ql_footer_'.$myglobal_post_id.'[content]', array(
 		'default'		=> QL_FOOTER_CONTENT,
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -890,7 +911,7 @@ function ql_customize_register( $wp_customize ){
 	$wp_customize->add_control( 'ql_footer_content', array(
 		'label'			=> 'Footer text',
 		'section'		=> 'ql_footer',
-		'settings'		=> 'ql_footer[content]',
+		'settings'		=> 'ql_footer_'.$myglobal_post_id.'[content]',
 		'type'			=> 'text',
 	));
 	
@@ -905,7 +926,7 @@ function ql_customize_register( $wp_customize ){
 	));
 	
 	// email
-	$wp_customize->add_setting( 'ql_widgets[email]', array(
+	$wp_customize->add_setting( 'ql_widgets_'.$myglobal_post_id.'[email]', array(
 		'default'		=> 'checked',
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -914,13 +935,13 @@ function ql_customize_register( $wp_customize ){
 	$wp_customize->add_control( 'ql_widgets_email', array(
 		'label'			=> 'Email Subscription',
 		'section'		=> 'ql_widgets',
-		'settings'		=> 'ql_widgets[email]',
+		'settings'		=> 'ql_widgets_'.$myglobal_post_id.'[email]',
 		'type'			=> 'checkbox',
 		'priority'		=> 1,
 	));
 	
 	// email
-	$wp_customize->add_setting( 'ql_widgets[mailchimp]', array(
+	$wp_customize->add_setting( 'ql_widgets_'.$myglobal_post_id.'[mailchimp]', array(
 		'default'		=> '',
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -929,13 +950,13 @@ function ql_customize_register( $wp_customize ){
 	$wp_customize->add_control( 'ql_widgets_mailchimp', array(
 		'label'			=> 'Use Mailchimp',
 		'section'		=> 'ql_widgets',
-		'settings'		=> 'ql_widgets[mailchimp]',
+		'settings'		=> 'ql_widgets_'.$myglobal_post_id.'[mailchimp]',
 		'type'			=> 'checkbox',
 		'priority'		=> 2,
 	));
 	
 	// email submit color
-	$wp_customize->add_setting( 'ql_widgets[email_submit_color]', array(
+	$wp_customize->add_setting( 'ql_widgets_'.$myglobal_post_id.'[email_submit_color]', array(
 		'default'		=> QL_WIDGETS_EMAIL_SUBMIT_COLOR,
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -944,19 +965,20 @@ function ql_customize_register( $wp_customize ){
 	$wp_customize->add_control( 'ql_widgets_email_submit_color', array(
 		'label'			=> 'Email Submit Button Color',
 		'section'		=> 'ql_widgets',
-		'settings'		=> 'ql_widgets[email_submit_color]',
+		'settings'		=> 'ql_widgets_'.$myglobal_post_id.'[email_submit_color]',
 		'type'			=> 'select',
 		'choices'		=> array(
 			'gray'	=> 'Gray',
 			'blue'	=> 'Blue',
 			'green'	=> 'Green',
 			'red'	=> 'Red',
+			'orange'	=> 'Orange',
 		),
 		'priority'		=> 3,
 	));
 	
 	// Center image
-	$wp_customize->add_setting( 'ql_widgets[image]', array(
+	$wp_customize->add_setting( 'ql_widgets_'.$myglobal_post_id.'[image]', array(
 		'default'		=> '',
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -966,13 +988,13 @@ function ql_customize_register( $wp_customize ){
 		$wp_customize, 'ql_widgets_image', array(
 			'label'			=> 'Center Image',
 			'section'		=> 'ql_widgets',
-			'settings'		=> 'ql_widgets[image]',
+			'settings'		=> 'ql_widgets_'.$myglobal_post_id.'[image]',
 			'priority'		=> 4,
 		))
 	);
 	
 	// email
-	$wp_customize->add_setting( 'ql_widgets[slider]', array(
+	$wp_customize->add_setting( 'ql_widgets_'.$myglobal_post_id.'[slider]', array(
 		'default'		=> '',
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -981,13 +1003,13 @@ function ql_customize_register( $wp_customize ){
 	$wp_customize->add_control( 'ql_widgets_slider', array(
 		'label'			=> 'Activate slider',
 		'section'		=> 'ql_widgets',
-		'settings'		=> 'ql_widgets[slider]',
+		'settings'		=> 'ql_widgets_'.$myglobal_post_id.'[slider]',
 		'type'			=> 'checkbox',
 		'priority'		=> 5,
 	));
 	
 	// Center slider image 1
-	$wp_customize->add_setting( 'ql_widgets[slider_image_1]', array(
+	$wp_customize->add_setting( 'ql_widgets_'.$myglobal_post_id.'[slider_image_1]', array(
 		'default'		=> '',
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -997,13 +1019,13 @@ function ql_customize_register( $wp_customize ){
 		$wp_customize, 'ql_widgets_slider_image_1', array(
 			'label'			=> 'Slider Image 1',
 			'section'		=> 'ql_widgets',
-			'settings'		=> 'ql_widgets[slider_image_1]',
+			'settings'		=> 'ql_widgets_'.$myglobal_post_id.'[slider_image_1]',
 			'priority'		=> 6,
 		))
 	);
 	
 	// Center slider image 2
-	$wp_customize->add_setting( 'ql_widgets[slider_image_2]', array(
+	$wp_customize->add_setting( 'ql_widgets_'.$myglobal_post_id.'[slider_image_2]', array(
 		'default'		=> '',
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -1013,13 +1035,13 @@ function ql_customize_register( $wp_customize ){
 		$wp_customize, 'ql_widgets_slider_image_2', array(
 			'label'			=> 'Slider Image 2',
 			'section'		=> 'ql_widgets',
-			'settings'		=> 'ql_widgets[slider_image_2]',
+			'settings'		=> 'ql_widgets_'.$myglobal_post_id.'[slider_image_2]',
 			'priority'		=> 7,
 		))
 	);
 	
 	// Center slider image 3
-	$wp_customize->add_setting( 'ql_widgets[slider_image_3]', array(
+	$wp_customize->add_setting( 'ql_widgets_'.$myglobal_post_id.'[slider_image_3]', array(
 		'default'		=> '',
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -1029,13 +1051,13 @@ function ql_customize_register( $wp_customize ){
 		$wp_customize, 'ql_widgets_slider_image_3', array(
 			'label'			=> 'Slider Image 3',
 			'section'		=> 'ql_widgets',
-			'settings'		=> 'ql_widgets[slider_image_3]',
+			'settings'		=> 'ql_widgets_'.$myglobal_post_id.'[slider_image_3]',
 			'priority'		=> 8,
 		))
 	);
 	
 	// Center slider image 4
-	$wp_customize->add_setting( 'ql_widgets[slider_image_4]', array(
+	$wp_customize->add_setting( 'ql_widgets_'.$myglobal_post_id.'[slider_image_4]', array(
 		'default'		=> '',
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -1045,13 +1067,13 @@ function ql_customize_register( $wp_customize ){
 		$wp_customize, 'ql_widgets_slider_image_4', array(
 			'label'			=> 'Slider Image 4',
 			'section'		=> 'ql_widgets',
-			'settings'		=> 'ql_widgets[slider_image_4]',
+			'settings'		=> 'ql_widgets_'.$myglobal_post_id.'[slider_image_4]',
 			'priority'		=> 9,
 		))
 	);
 	
 	// Center youtube video
-	$wp_customize->add_setting( 'ql_widgets[video]', array(
+	$wp_customize->add_setting( 'ql_widgets_'.$myglobal_post_id.'[video]', array(
 		'default'		=> '',
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -1060,13 +1082,13 @@ function ql_customize_register( $wp_customize ){
 	$wp_customize->add_control( 'ql_widgets_video', array(
 		'label'			=> 'Center Youtube Video Link',
 		'section'		=> 'ql_widgets',
-		'settings'		=> 'ql_widgets[video]',
+		'settings'		=> 'ql_widgets_'.$myglobal_post_id.'[video]',
 		'type'			=> 'text',
 		'priority'		=> 10,
 	));
 	
 	// Show wordpress widgets
-	$wp_customize->add_setting( 'ql_widgets[wordpress]', array(
+	$wp_customize->add_setting( 'ql_widgets_'.$myglobal_post_id.'[wordpress]', array(
 		'default'		=> '',
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -1075,7 +1097,7 @@ function ql_customize_register( $wp_customize ){
 	$wp_customize->add_control( 'ql_widgets_wordpress', array(
 		'label'			=> 'Show Wordpress Widgets',
 		'section'		=> 'ql_widgets',
-		'settings'		=> 'ql_widgets[wordpress]',
+		'settings'		=> 'ql_widgets_'.$myglobal_post_id.'[wordpress]',
 		'type'			=> 'checkbox',
 		'priority'		=> 11,
 	));
@@ -1097,7 +1119,7 @@ function ql_customize_register( $wp_customize ){
 	));
 	
 	// Background color
-	$wp_customize->add_setting( 'ql_background[color]', array(
+	$wp_customize->add_setting( 'ql_background_'.$myglobal_post_id.'[color]', array(
 		'default'		=> QL_BACKGROUND_COLOR,
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -1107,11 +1129,11 @@ function ql_customize_register( $wp_customize ){
 		$wp_customize, 'ql_background_color', array(
 			'label'			=> 'Background color',
 			'section'		=> 'ql_background',
-			'settings'		=> 'ql_background[color]',
+			'settings'		=> 'ql_background_'.$myglobal_post_id.'[color]',
 		))
 	);
 	// Background image
-	$wp_customize->add_setting( 'ql_background[image]', array(
+	$wp_customize->add_setting( 'ql_background_'.$myglobal_post_id.'[image]', array(
 		'default'		=> '',
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -1121,12 +1143,12 @@ function ql_customize_register( $wp_customize ){
 		$wp_customize, 'ql_background_image', array(
 			'label'			=> 'Background image',
 			'section'		=> 'ql_background',
-			'settings'		=> 'ql_background[image]',
+			'settings'		=> 'ql_background_'.$myglobal_post_id.'[image]',
 		))
 	);
 
     // Enable Background Gradient
-    $wp_customize->add_setting('ql_background[gradient]', array(
+    $wp_customize->add_setting('ql_background_'.$myglobal_post_id.'[gradient]', array(
         'default'       => false,
         'type'          => 'option',
         'transport'     => 'postMessage'
@@ -1135,7 +1157,7 @@ function ql_customize_register( $wp_customize ){
         $wp_customize, 'ql_bg_gradient', array(
             'label'     => 'Gradient Background',
             'section'   => 'ql_background',
-            'settings'  => 'ql_background[gradient]',
+            'settings'  => 'ql_background_'.$myglobal_post_id.'[gradient]',
             'choices'    => array('blue', 'green', 'red', 'dark-grey', 'grey')
         ))
     );
@@ -1151,7 +1173,7 @@ function ql_customize_register( $wp_customize ){
 	));
 	
 	// Content text color
-	$wp_customize->add_setting( 'ql_content[content]', array(
+	$wp_customize->add_setting( 'ql_content_'.$myglobal_post_id.'[content]', array(
 		'default'		=> QL_CONTENT_CONTENT,
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -1161,20 +1183,20 @@ function ql_customize_register( $wp_customize ){
 		$wp_customize, 'ql_content_content', array(
 			'label'			=> 'Content',
 			'section'		=> 'ql_content',
-			'settings'		=> 'ql_content[content]',
+			'settings'		=> 'ql_content_'.$myglobal_post_id.'[content]',
 		))
 	);
 	 
    // CONTENT FONT
-	$wp_customize->add_setting( 'ql_content[fontinfoa]', array(
+	$wp_customize->add_setting( 'ql_content_'.$myglobal_post_id.'[fontinfoa]', array(
 		'default'		=> 'QL_CONTENT_CONTENTFONT',
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
 	));
-	$wp_customize->add_control( 'ql_content[content]', array(
+	$wp_customize->add_control( 'ql_content_'.$myglobal_post_id.'[content]', array(
 		'label'			=> 'Content Font',
 		'section'		=> 'ql_content',
-		'settings'		=> 'ql_content[fontinfoa]',
+		'settings'		=> 'ql_content_'.$myglobal_post_id.'[fontinfoa]',
 		'type'			=> 'select',
 		'choices'		=> array(
 			''			=> '-None-',
@@ -1248,6 +1270,7 @@ function ql_customize_register( $wp_customize ){
 			'Londrina Sketch'	=> 'Londrina Sketch',
 			'Luckiest Guy'		=> 'Luckiest Guy',
 			'Oleo Script'		=> 'Oleo Script',
+			'Oswald'		=> 'Oswald',
 			'Ovo'			=> 'Ovo',
 			'Oxygen'		=> 'Oxygen',
 			'Pathway Gothic One'	=> 'Pathway Gothic One',
@@ -1294,16 +1317,16 @@ function ql_customize_register( $wp_customize ){
 
 // Viravnivanie
     // Position
-	$wp_customize->add_setting( 'ql_content[positiontext]', array(
+	$wp_customize->add_setting( 'ql_content_'.$myglobal_post_id.'[positiontext]', array(
 		'default'		=> QL_CONTENT_POSITIONTEXT,
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
 		'transport'		=> 'postMessage',
 	));
-	$wp_customize->add_control('ql_content[positiontext]', array(
+	$wp_customize->add_control('ql_content_'.$myglobal_post_id.'[positiontext]', array(
 		'label'			=> 'Position',
 		'section'		=> 'ql_content',
-		'settings'		=> 'ql_content[positiontext]',
+		'settings'		=> 'ql_content_'.$myglobal_post_id.'[positiontext]',
 		'type'			=> 'radio',
 		'choices'		=> array(
 			'left'=>'Left',
@@ -1316,7 +1339,7 @@ function ql_customize_register( $wp_customize ){
 
 
 	// Content text color
-	$wp_customize->add_setting( 'ql_content[color]', array(
+	$wp_customize->add_setting( 'ql_content_'.$myglobal_post_id.'[color]', array(
 		'default'		=> QL_CONTENT_COLOR,
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -1326,11 +1349,11 @@ function ql_customize_register( $wp_customize ){
 		$wp_customize, 'ql_content_color', array(
 			'label'			=> 'Content text color',
 			'section'		=> 'ql_content',
-			'settings'		=> 'ql_content[color]',
+			'settings'		=> 'ql_content_'.$myglobal_post_id.'[color]',
 		))
 	);
 
-	$wp_customize->add_setting( 'ql_content[opacity]', array(
+	$wp_customize->add_setting( 'ql_content_'.$myglobal_post_id.'[opacity]', array(
 		'default'		=> QL_CONTENT_OPACITY,
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -1339,7 +1362,7 @@ function ql_customize_register( $wp_customize ){
 	$wp_customize->add_control( 'ql_content_opacity', array(
 		'label'			=> 'Content opacity (0-100)',
 		'section'		=> 'ql_content',
-		'settings'		=> 'ql_content[opacity]',
+		'settings'		=> 'ql_content_'.$myglobal_post_id.'[opacity]',
 		'type'			=> 'text',
 	));
 
@@ -1348,7 +1371,7 @@ function ql_customize_register( $wp_customize ){
 	// Content text color
 	
 
-	$wp_customize->add_setting( 'ql_content[headerthreecolor]', array(
+	$wp_customize->add_setting( 'ql_content_'.$myglobal_post_id.'[headerthreecolor]', array(
 		'default'		=> QL_CONTENT_H3_COLOR,
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -1358,11 +1381,11 @@ function ql_customize_register( $wp_customize ){
 		$wp_customize, 'ql_headerthreecolor', array(
 			'label'			=> 'H3 Color',
 			'section'		=> 'ql_content',
-			'settings'		=> 'ql_content[headerthreecolor]'
+			'settings'		=> 'ql_content_'.$myglobal_post_id.'[headerthreecolor]'
 		))
 	);
 
-	$wp_customize->add_setting( 'ql_content[headerthreesize]', array(
+	$wp_customize->add_setting( 'ql_content_'.$myglobal_post_id.'[headerthreesize]', array(
 		'default'		=> QL_CONTENT_H3_FONTSIZE,
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -1371,10 +1394,10 @@ function ql_customize_register( $wp_customize ){
 	$wp_customize->add_control( 'ql_headerthreesize', array(
 		'label'			=> 'H3 Font Size',
 		'section'		=> 'ql_content',
-		'settings'		=> 'ql_content[headerthreesize]',
+		'settings'		=> 'ql_content_'.$myglobal_post_id.'[headerthreesize]',
 	));
 
-	$wp_customize->add_setting( 'ql_content[headerthree]', array(
+	$wp_customize->add_setting( 'ql_content_'.$myglobal_post_id.'[headerthree]', array(
 		'default'		=> 'QL_CONTENT_CONTENTH3FONT',
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options'
@@ -1382,7 +1405,7 @@ function ql_customize_register( $wp_customize ){
 	$wp_customize->add_control( 'ql_headerthree', array(
 		'label'			=> 'H3 Font',
 		'section'		=> 'ql_content',
-		'settings'		=> 'ql_content[headerthree]',
+		'settings'		=> 'ql_content_'.$myglobal_post_id.'[headerthree]',
 		'type'			=> 'select',
 		'choices'		=> array(
 			''			=> '-None-',
@@ -1456,6 +1479,7 @@ function ql_customize_register( $wp_customize ){
 			'Londrina Sketch'	=> 'Londrina Sketch',
 			'Luckiest Guy'		=> 'Luckiest Guy',
 			'Oleo Script'		=> 'Oleo Script',
+			'Oswald'		=> 'Oswald',
 			'Ovo'			=> 'Ovo',
 			'Oxygen'		=> 'Oxygen',
 			'Pathway Gothic One'	=> 'Pathway Gothic One',
@@ -1496,7 +1520,7 @@ function ql_customize_register( $wp_customize ){
 
 
 			// Line spacing
-    $wp_customize->add_setting('ql_content[line_spacing]', array(
+    $wp_customize->add_setting('ql_content_'.$myglobal_post_id.'[line_spacing]', array(
         'default'       => QL_CONTENT_LINE_SPACING,
         'transport'     => 'postMessage',
         'type'          => 'option'
@@ -1505,7 +1529,7 @@ function ql_customize_register( $wp_customize ){
     $wp_customize->add_control(new QL_Slider_Control($wp_customize, 'ql_content_line_spacing', array(
             'label'     => 'Line Spacing',
             'section'   => 'ql_content',
-            'settings'  => 'ql_content[line_spacing]',
+            'settings'  => 'ql_content_'.$myglobal_post_id.'[line_spacing]',
             'min'       => 0,
             'max'       => 100,
             'step'      => 1
@@ -1519,7 +1543,7 @@ function ql_customize_register( $wp_customize ){
 		'priority'		=> 36,
 	));
 
-    	$wp_customize->add_setting( 'ql_emailsign[emailtiptext]', array(
+    	$wp_customize->add_setting( 'ql_emailsign_'.$myglobal_post_id.'[emailtiptext]', array(
 		'default'		=> QL_CONTENT_EMAIL_TIPTEXT,
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
@@ -1528,25 +1552,38 @@ function ql_customize_register( $wp_customize ){
 	$wp_customize->add_control( 'ql_emailtiptext', array(
 		'label'			=> 'Email Signup Text',
 		'section'		=> 'ql_emailsign',
-		'settings'		=> 'ql_emailsign[emailtiptext]',
+		'settings'		=> 'ql_emailsign_'.$myglobal_post_id.'[emailtiptext]',
 	));
 
-	$wp_customize->add_setting( 'ql_emailsign[emailtipposition]', array(
+	$wp_customize->add_setting( 'ql_emailsign_'.$myglobal_post_id.'[emailtipposition]', array(
 		'default'		=> QL_CONTENT_POSITIONEMAIL,
 		'type'			=> 'option',
 		'capability'	=> 'edit_theme_options',
 		'transport'		=> 'postMessage',
 	));
-	$wp_customize->add_control('ql_emailsign[emailtipposition]', array(
+	$wp_customize->add_control('ql_emailsign_'.$myglobal_post_id.'[emailtipposition]', array(
 		'label'			=> 'Email Signup Position',
 		'section'		=> 'ql_emailsign',
-		'settings'		=> 'ql_emailsign[emailtipposition]',
+		'settings'		=> 'ql_emailsign_'.$myglobal_post_id.'[emailtipposition]',
 		'type'			=> 'radio',
 		'choices'		=> array(
 			'bottom'=>'Bottom',
 			'belowslider'=>'Below Slider',
 			'both'=>'Both',
 		),
+	));
+
+	$wp_customize->add_setting( 'ql_emailsign_'.$myglobal_post_id.'[emailalert]', array(
+		'default'		=> 'checked',
+		'type'			=> 'option',
+		'capability'	=> 'edit_theme_options',
+		'transport'		=> 'postMessage',
+	));
+	$wp_customize->add_control('ql_emailsign_'.$myglobal_post_id.'[emailalert]', array(
+		'label'			=> 'Send email alert to Admins',
+		'section'		=> 'ql_emailsign',
+		'settings'		=> 'ql_emailsign_'.$myglobal_post_id.'[emailalert]',
+		'type'			=> 'checkbox',
 	));
 
 	// remove static front page section
@@ -1563,10 +1600,11 @@ add_action( 'customize_register', 'ql_customize_register' );
 
 function ql_customize_css()
 {
-	$ql_content = get_option('ql_content');
-	$ql_title_tagline = get_option('ql_title_tagline');
-	$ql_background = get_option('ql_background');
-	$ql_layout = get_option('ql_layout');
+	$postID=$_SESSION["postid"];
+	$ql_content = get_option('ql_content_'.$postID);
+	$ql_title_tagline = get_option('ql_title_tagline_'.$postID);
+	$ql_background = get_option('ql_background_'.$postID);
+	$ql_layout = get_option('ql_layout_'.$postID);
     ?>
 
 <?php if ( ! empty($ql_title_tagline['font']) ): ?>
@@ -1656,19 +1694,57 @@ line-height: <?php echo $ql_content['line_spacing']; ?>px
 
             #wrap {
 				padding: <?php echo $ql_layout['padding']?$ql_layout['padding']:QL_LAYOUT_PADDING; ?>px; 
-				border-radius:<?php echo $ql_layout['roundness']?$ql_layout['roundness']:QL_LAYOUT_ROUNDNESS ?>px; 
-				-moz-border-radius:<?php echo $ql_layout['roundness']?$ql_layout['roundness']:QL_LAYOUT_ROUNDNESS ?>px; 
-				-webkit-border-radius:<?php echo $ql_layout['roundness']?$ql_layout['roundness']:QL_LAYOUT_ROUNDNESS ?>px;
-				box-shadow:0 0 <?php echo $ql_layout['boxShadow']?$ql_layout['boxShadow']:QL_LAYOUT_BOX_SHADOW; ?>px #333;
-				-moz-box-shadow:0 0 <?php echo $ql_layout['boxShadow']?$ql_layout['boxShadow']:QL_LAYOUT_BOX_SHADOW; ?>px #333;
-				-webkit-box-shadow:0 0 <?php echo $ql_layout['boxShadow']?$ql_layout['boxShadow']:QL_LAYOUT_BOX_SHADOW; ?>px #333;
+				border-radius:<?php echo isset($ql_layout['roundness'])?$ql_layout['roundness']:QL_LAYOUT_ROUNDNESS ?>px; 
+				-moz-border-radius:<?php echo isset($ql_layout['roundness'])?$ql_layout['roundness']:QL_LAYOUT_ROUNDNESS ?>px; 
+				-webkit-border-radius:<?php echo isset($ql_layout['roundness'])?$ql_layout['roundness']:QL_LAYOUT_ROUNDNESS ?>px;
+				box-shadow:#333 0 0 <?php echo $ql_layout['boxShadow']?$ql_layout['boxShadow']:QL_LAYOUT_BOX_SHADOW; ?>px;
+				-moz-box-shadow:#333 0 0 <?php echo $ql_layout['boxShadow']?$ql_layout['boxShadow']:QL_LAYOUT_BOX_SHADOW; ?>px;
+				-webkit-box-shadow:#333 0 0 <?php echo $ql_layout['boxShadow']?$ql_layout['boxShadow']:QL_LAYOUT_BOX_SHADOW; ?>px;
+			<?php 	
+				$mbrowse=get_user_browser();
+				if($mbrowse=="ie"):?>
+				background:url("<?php echo get_template_directory_uri().'/js/rgba/rgba.php?r=255&g=255&b=255&a='.($ql_content['opacity']?($ql_content['opacity']):(QL_CONTENT_OPACITY));?>");
+			<?php else: ?>
 				background-color: rgba(255, 255, 255, <?php echo $ql_content['opacity']?($ql_content['opacity']/100):(QL_CONTENT_OPACITY/100); ?>);
+			<?php endif; ?>
+				behavior:url("<?php echo get_template_directory_uri().'/js/pie/PIE.htc';?>");
 			}
         </style>
     <?php
 }
 add_action( 'wp_head', 'ql_customize_css');
 
+function get_user_browser()
+{
+    $u_agent = $_SERVER['HTTP_USER_AGENT'];
+    $ub = '';
+    if(preg_match('/MSIE/i',$u_agent))
+    {
+        $ub = "ie";
+    }
+    elseif(preg_match('/Firefox/i',$u_agent))
+    {
+        $ub = "firefox";
+    }
+    elseif(preg_match('/Safari/i',$u_agent))
+    {
+        $ub = "safari";
+    }
+    elseif(preg_match('/Chrome/i',$u_agent))
+    {
+        $ub = "chrome";
+    }
+    elseif(preg_match('/Flock/i',$u_agent))
+    {
+        $ub = "flock";
+    }
+    elseif(preg_match('/Opera/i',$u_agent))
+    {
+        $ub = "opera";
+    }
+
+    return $ub;
+}
 
 function ql_enqueue_scripts(){
 	wp_enqueue_script(
@@ -1682,11 +1758,14 @@ add_action('wp_enqueue_scripts', 'ql_enqueue_scripts');
 
 /* Live view cusomize */
 function ql_customize_preview() {
+	$custom_post_id=$_SESSION["postid"];
 	?>
 	<script type="text/javascript">
 	/**
 	 * @credit http://papermashup.com/read-url-get-variables-withjavascript/
 	 */
+	
+
 	function getUrlVar(url, key) {
 		var val;
 		var parts = url.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,k,value) {
@@ -1699,6 +1778,7 @@ function ql_customize_preview() {
 		/**
 		 * Set social network icon links
 		 */
+		var mycoin2=$('#coin-slider ul.slides').clone();
 		function socialLink(network, lnk){
 			if(lnk.length != 0){
 				$('#social-'+network+' a').attr('href', lnk);
@@ -1712,7 +1792,7 @@ function ql_customize_preview() {
 		// content font-family settings
 		
 		// position
-		wp.customize('ql_layout[position]', function (value){
+		wp.customize('ql_layout_<?php echo $custom_post_id;?>[position]', function (value){
 			value.bind(function(to){
 				// first remove all position classes
 				$('#wrap').removeClass('pos-center');
@@ -1724,38 +1804,88 @@ function ql_customize_preview() {
 			});
 		});
 		
+
+	    wp.customize('ql_content_<?php echo $custom_post_id;?>[content]', function (value){
+		value.bind(function(to){
+			$('#page-content').html(parseContent(to));
+		    });
+	    });
+
+	    wp.customize('ql_content_<?php echo $custom_post_id;?>[positiontext]',function( value ) {
+		value.bind(function(to) {
+			$('#page-content').css('text-align', to);
+    		    });
+            });
+
+	    wp.customize('ql_content_<?php echo $custom_post_id;?>[color]',function( value ) {
+		value.bind(function(to) {
+			$('#page-content').css('color', to);
+    		    });
+            });
+
+	    wp.customize('ql_content_<?php echo $custom_post_id;?>[headerthreecolor]',function( value ) {
+		value.bind(function(to) {
+			$('#page-content h3').css('color', to);
+    		});
+    		});
+
+    	    wp.customize('ql_content_<?php echo $custom_post_id;?>[headerthreesize]',function( value ) {
+		value.bind(function(to) {
+			$('#page-content h3').css('font-size', to+"px");
+    		});
+    	    });
+
+	    wp.customize('ql_content_<?php echo $custom_post_id;?>[line_spacing]', function(value) {
+        	value.bind(function(newval) {
+            		$('#page-content p').css('line-height', newval + 'px');
+        	});
+    	    });
+
+    	/**
+	 * Parse plain text to html
+	 */
+	function parseContent(content){
+		// parse links
+		//var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+		//content = content.replace(exp,"<a href='$1'>$1</a>");
+			
+		// add html p tags
+		/*content = '<p>'+content;
+		content = content.replace(/\n/g, '</p><p>');
+		content += '</p>';*/
+		jQuery.ajaxSetup({async:false});
+		jQuery.post("/wp-content/themes/QuickLaunch.me-master/echowp.php","postcontent="+content,function(data){
+			content=data;
+		});
+		jQuery.ajaxSetup({async:true});
+		return content;
+			
+	}
+
+
 		// footer text
-		wp.customize('ql_footer[content]', function (value){
+		wp.customize('ql_footer_<?php echo $custom_post_id;?>[content]', function (value){
 			value.bind(function(to){
 				$('#copyright p').html(to);
 			});
 		});
 		
 		// background color
-		wp.customize('ql_background[color]', function (value){
+		wp.customize('ql_background_<?php echo $custom_post_id;?>[color]', function (value){
 			value.bind(function(to){
 				$('body').css('background-color', to);
 			});
 		});
 		
 		// padding 
-		wp.customize('ql_layout[padding]', function (value){
+		wp.customize('ql_layout_<?php echo $custom_post_id;?>[padding]', function (value){
 			value.bind(function(to){
 				$('#wrap').css('padding', to+'px');
 			});
 		});
 		
-		// corner radius
-		wp.customize('ql_layout[roundness]', function (value){
-			value.bind(function(to){
-				$('#wrap').css('border-radius', to+'px');
-				$('#wrap').css('-moz-border-radius', to+'px');
-				$('#wrap').css('-webkit-border-radius', to+'px');
-			});
-		});
-		
 		// box shadow
-		wp.customize('ql_layout[boxShadow]', function (value){
+		wp.customize('ql_layout_<?php echo $custom_post_id;?>[boxShadow]', function (value){
 			value.bind(function(to){
 				$('#wrap').css('box-shadow', '0 0 '+to+'px #333');
 				$('#wrap').css('-moz-box-shadow', '0 0 '+to+'px #333');
@@ -1764,14 +1894,14 @@ function ql_customize_preview() {
 		});
 		
 		// box Opacity
-		wp.customize('ql_content[opacity]', function (value){
+		wp.customize('ql_content_<?php echo $custom_post_id;?>[opacity]', function (value){
 			value.bind(function(to){
 				$('#wrap').css('background-color', 'rgba(255, 255, 255, '+(to/100)+')');
 			});
 		});
 		
 		// Email
-		wp.customize('ql_widgets[email]', function (value){
+		wp.customize('ql_widgets_<?php echo $custom_post_id;?>[email]', function (value){
 			value.bind(function(to){
 				if(to)
 					$('#email').show();
@@ -1779,19 +1909,10 @@ function ql_customize_preview() {
 					$('#email').hide();
 			});
 		});
-		
-		// Center image
-		wp.customize('ql_widgets[image]', function (value){
-			value.bind(function(to){
-				if(to.length != 0)
-					$('#center-image').html('<img src="'+to+'" style="width:100%;" />').show();
-				else
-					$('#center-image').html('').hide();
-			});
-		});
+	
 		
 		// Center video
-		wp.customize('ql_widgets[video]', function (value){
+		wp.customize('ql_widgets_<?php echo $custom_post_id;?>[video]', function (value){
 			value.bind(function(to){
 				if(to.length != 0){
 					videoId = getUrlVar(to, 'v');				
@@ -1811,14 +1932,14 @@ function ql_customize_preview() {
 		});
 		
 		// Social network links
-		wp.customize('ql_social[twitter]', function (value){ value.bind(function(to){ socialLink('twitter', to); }); });
-		wp.customize('ql_social[youtube]', function (value){ value.bind(function(to){ socialLink('youtube', to); }); });
-		wp.customize('ql_social[facebook]', function (value){ value.bind(function(to){ socialLink('facebook', to); }); });
-		wp.customize('ql_social[googleplus]', function (value){ value.bind(function(to){ socialLink('googleplus', to); }); });
-		wp.customize('ql_social[linkedin]', function (value){ value.bind(function(to){ socialLink('linkedin', to); }); });
+		wp.customize('ql_social_<?php echo $custom_post_id;?>[twitter]', function (value){ value.bind(function(to){ socialLink('twitter', to); }); });
+		wp.customize('ql_social_<?php echo $custom_post_id;?>[youtube]', function (value){ value.bind(function(to){ socialLink('youtube', to); }); });
+		wp.customize('ql_social_<?php echo $custom_post_id;?>[facebook]', function (value){ value.bind(function(to){ socialLink('facebook', to); }); });
+		wp.customize('ql_social_<?php echo $custom_post_id;?>[googleplus]', function (value){ value.bind(function(to){ socialLink('googleplus', to); }); });
+		wp.customize('ql_social_<?php echo $custom_post_id;?>[linkedin]', function (value){ value.bind(function(to){ socialLink('linkedin', to); }); });
 	
 		// Backgroud image
-		wp.customize('ql_background[image]', function (value){
+		wp.customize('ql_background_<?php echo $custom_post_id;?>[image]', function (value){
 			value.bind(function(to){
 				if(to.length != 0)
 					$('body').css('background', 'url(\''+to+'\') center 25% no-repeat fixed');
@@ -1827,9 +1948,21 @@ function ql_customize_preview() {
 			});
 		});
 		
+		wp.customize('ql_background_<?php echo $custom_post_id;?>[gradient]', function (value){
+			value.bind(function(to){
+				if(to.length != 0){
+					$('body').css('background', 'url(\'<?php echo get_template_directory_uri() ?> /images/backgrounds/'+to+'-gradient.jpg\')');
+   				        $('body').css('background-size', '100% 100%');
+				        $('body').css('background-attachment', 'scroll');
+
+				}else{
+					$('body').css('background-image', 'none');
+				}
+			});
+		});
 		
 		// wordpress widgets
-		wp.customize('ql_widgets[wordpress]', function (value){
+		wp.customize('ql_widgets_<?php echo $custom_post_id;?>[wordpress]', function (value){
 			value.bind(function(to){
 				console.log(to);
 				if(to)
@@ -1840,7 +1973,7 @@ function ql_customize_preview() {
 		});
 		
 		// wordpress widgets
-		wp.customize('ql_title_tagline[logo]', function (value){
+		wp.customize('ql_title_tagline_<?php echo $custom_post_id;?>[logo]', function (value){
 			value.bind(function(to){
 				if(to.length != 0){
 					$('#site-logo').html('<img src="'+to+'" style="max-width:100%;" />')
@@ -1860,30 +1993,54 @@ function ql_customize_preview() {
 		});
 		
 		// title color
-		wp.customize('ql_title_tagline[title_color]', function (value){
+		wp.customize('ql_title_tagline_<?php echo $custom_post_id;?>[title_color]', function (value){
 			value.bind(function(to){
 				$('#site-title').css('color', to);
 			});
 		});
 		
 		// title align
-		wp.customize('ql_title_tagline[postitle]', function (value){
+		wp.customize('ql_title_tagline_<?php echo $custom_post_id;?>[postitle]', function (value){
 			value.bind(function(to){
 				$('#site-title').css('text-align', to);
+			});
+		});
+
+	    	wp.customize('ql_title_tagline_<?php echo $custom_post_id;?>[title_margin]', function(value) {
+        		value.bind(function(newval) {
+            			$('#site-title').css('margin-bottom', newval + 'px');
+        		});
+    		});
+
+    		wp.customize('ql_title_tagline_<?php echo $custom_post_id;?>[header_bottom_margin]', function(value) {
+        		value.bind(function(newval) {
+            			$('header').css('margin-bottom', newval + 'px');
+        		});
+    		});
+
+		wp.customize('ql_title_tagline_<?php echo $custom_post_id;?>[postitleinfo]', function (value){
+			value.bind(function(to){
+				$('#site-desc').css('text-align', to);
+			});
+		});
+
+		wp.customize('ql_title_tagline_<?php echo $custom_post_id;?>[title_colorinfo]', function (value){
+			value.bind(function(to){
+				$('#site-desc').css('color', to);
 			});
 		});
 
 
 
 		// newsletter submit button color
-		wp.customize('ql_widgets[email_submit_color]', function (value){
+		wp.customize('ql_widgets_<?php echo $custom_post_id;?>[email_submit_color]', function (value){
 			value.bind(function(to){
 				$('.newsletter-form .btn').attr('class', 'btn '+to);
 			});
 		});
 		
 		// Use mailchimp
-		wp.customize('ql_widgets[mailchimp]', function (value){
+		wp.customize('ql_widgets_<?php echo $custom_post_id;?>[mailchimp]', function (value){
 			value.bind(function(to){
 				if(to){
 					$('#email').hide();
@@ -1894,11 +2051,95 @@ function ql_customize_preview() {
 				}
 			});
 		});
+
+		wp.customize('ql_emailsign_<?php echo $custom_post_id;?>[emailtiptext]', function (value){
+			value.bind(function(to){
+				$('input[name=email]').attr("placeholder",to);
+   	 		});
+    		});
+    		wp.customize('ql_emailsign_<?php echo $custom_post_id;?>[emailtipposition]', function (value){
+			value.bind(function(to){
+				if(to=='belowslider'){
+					$('.email-top').removeClass("hidden");
+					$('.email-bottom').addClass("hidden");
+				}else if(to=='bottom'){
+					$('.email-top').addClass("hidden");
+					$('.email-bottom').removeClass("hidden");
+				}else{
+					$('.email-top,.email-bottom').removeClass("hidden");
+				}
+    			});
+    		});
+
+		// corner radius
+		wp.customize('ql_layout_<?php echo $custom_post_id;?>[roundness]', function (value){
+			value.bind(function(to){
+				$('#wrap').css('border-radius', to+'px');
+				$('#wrap').css('-moz-border-radius', to+'px');
+				$('#wrap').css('-webkit-border-radius', to+'px');
+			});
+		});
+
+		// Content
+		
+		// Slider
+		wp.customize('ql_widgets_<?php echo $custom_post_id;?>[slider]', function (value){ 
+			value.bind(function(to){ 
+				if(to) 
+					$('#image-slider').show(); 
+				else 
+					$('#image-slider').hide(); 
+			}); 
+		});
+		wp.customize('ql_widgets_<?php echo $custom_post_id;?>[slider_image_1]', function (value){ value.bind(function(to){ sliderImage(1, to); }); });
+		wp.customize('ql_widgets_<?php echo $custom_post_id;?>[slider_image_2]', function (value){ value.bind(function(to){ sliderImage(2, to); }); });
+		wp.customize('ql_widgets_<?php echo $custom_post_id;?>[slider_image_3]', function (value){ value.bind(function(to){ sliderImage(3, to); }); });
+		wp.customize('ql_widgets_<?php echo $custom_post_id;?>[slider_image_4]', function (value){ value.bind(function(to){ sliderImage(4, to); }); });
+
+		function sliderImage(id, url){
+			if(url.length != 0){
+				if($('#slider-image-'+id).length > 0){
+					$('img[id=slider-image-'+id+']').attr("src",url);
+				}else{
+					$('<div id="coin-slider" class="mycoinslider"></div>').insertAfter(".mycoinslider");
+					$(".mycoinslider:eq(0)").remove();
+					mycoin2.find(".clone").remove();
+					mycoin2.find("li").removeAttr("class");
+					$('#coin-slider').append(mycoin2);
+					$('#coin-slider').find("ul.slides").append('<li><img id="slider-image-'+id+'" src="'+url+'" style="max-width:460px"/></li>');
+				}
+			}else{
+				$('#slider-image-'+id).remove();
+			}
+			
+			// restart coinslider
+			//$('#coin-slider').coinslider({width:468, links:false});
+			$('#coin-slider').flexslider({animation: "slide",});
+	}
+
+			
+		// Center image
+		wp.customize('ql_widgets_<?php echo $custom_post_id;?>[image]', function (value){
+			value.bind(function(to){
+				if(to.length != 0)
+					$('#center-image').html('<img src="'+to+'" style="width:100%;" />').show();
+				else
+					$('#center-image').html('').hide();
+			});
+		});
+
+
 		
 	} )( jQuery)
 	</script>
 	<?php 
 } 
 
+add_shortcode("cta","show_cta_button");
+
+
+function show_cta_button($atts){
+	return '<a href="'.$atts["link"].'" style="text-decoration:none"><input type="button" value="'.$atts["name"].'" name="" class="btn '.$atts["color"].'"></a>';
+}
 
 ?>

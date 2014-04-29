@@ -8,6 +8,11 @@
 	}
 
 	$(document).ready(function() {
+
+		ajaxalert=function(a){
+			jQuery(".email_status_text").removeClass("hideemail");
+			jQuery(".email_status_text").html(a);
+		};
 		
 		$('.newsletter-form').submit(function(evt) {
 			
@@ -15,9 +20,15 @@
 			
 			var form = $(this);
 			var email = $('.email', form).eq(0);
+
+			class_parent=jQuery(this).closest("div");
+
+			if(class_parent.find(".email_status_text").length==0){
+				jQuery('<p align="center" class="email_status_text hideemail"></p>').insertBefore(class_parent.find(".email"));
+			}
 			
 			if ( ! is_email(email.val()) ) {
-				alert('Invalid email address.');
+				ajaxalert('Invalid email address.');
 				email.focus();
 				return;
 			}
@@ -30,11 +41,11 @@
 			};
 			$.post(QL.ajaxurl, data, function(r) {
 				if (r.status == 'ok') {
-					alert('Thanks for registering!');
+					ajaxalert('Thanks for registering!');
 					email.val('');
 				}
 				else {
-					alert(r.msg);
+					ajaxalert(r.msg);
 				}
 				$('input', form).prop('disabled', false);
 			}, 'json');

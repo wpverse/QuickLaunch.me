@@ -48,7 +48,7 @@ function ql_define_custom_controls($wp_customize)
                     <li><a href="#" class="<?php echo $color; ?>"></a></li>
                     <?php endforeach; ?>
                 </ul>
-                <input type="text" value="<?php echo esc_attr($this->value()); ?>" <?php $this->link(); ?> class="gradient-value">
+                <input type="hidden" value="<?php echo esc_attr($this->value()); ?>" <?php $this->link(); ?> class="gradient-value">
             </div>
         <?php
         }
