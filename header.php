@@ -7,10 +7,7 @@ $ql_layout = get_option('ql_layout');
 
 	<meta charset="<?php bloginfo('charset') ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<<<<<<< HEAD
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-=======
->>>>>>> c1c43ac0780ad5ad743fee4203992e6359649afe
 	<title><?php bloginfo('title') ?></title>
 	
 	<link rel="stylesheet" href="<?php bloginfo('stylesheet_url') ?>">

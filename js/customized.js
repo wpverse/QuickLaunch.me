@@ -1,7 +1,5 @@
 (function($) {
 
-<<<<<<< HEAD
-=======
     wp.customize('ql_title_tagline[header_bottom_margin]', function(value) {
         value.bind(function(newval) {
             $('header').css('margin-bottom', newval + 'px');
@@ -103,6 +101,5 @@
 		wp.customize('ql_widgets[slider_image_3]', function (value){ value.bind(function(to){ sliderImage(3, to); }); });
 		wp.customize('ql_widgets[slider_image_4]', function (value){ value.bind(function(to){ sliderImage(4, to); }); });
 
-    
->>>>>>> c1c43ac0780ad5ad743fee4203992e6359649afe
+
 })(jQuery);

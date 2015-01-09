@@ -18,7 +18,7 @@ $ql_title_tagline = get_option('ql_title_tagline_'.$glob_postid);
 	<script src="http://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js"></script>
 	<script type="text/javascript">
 		var mycoin2="";
-<<<<<<< HEAD
+
 		<?php if($ql_title_tagline['font']): ?>
 		WebFont.load({
 			google: {
@@ -37,40 +37,14 @@ $ql_title_tagline = get_option('ql_title_tagline_'.$glob_postid);
 
 	<?php if($ql_widgets['slider']): ?>
 	jQuery(function(){
-				jQuery("document").ready(function(){
-					mycoin2=jQuery('#coin-slider ul.slides').clone();
-					jQuery('#coin-slider').flexslider({
-						animation: "slide"
-					});
-				});
-=======
-			<?php if($ql_title_tagline['font']): ?>
-			WebFont.load({
-				google: {
-					families: ['<?php echo $ql_title_tagline['font']; ?>']
-				},
-				active:function(){
-					var style = 'header h1{ font-family: "<?php echo $ql_title_tagline['font']; ?>"; }';
-					
-					var sc=document.createElement('style')
-					  sc.setAttribute("type","text/css");
-					  sc.innerHTML= style;
-					  document.getElementsByTagName("head")[0].appendChild(sc)
-				}
+		jQuery("document").ready(function(){
+			mycoin2=jQuery('#coin-slider ul.slides').clone();
+			jQuery('#coin-slider').flexslider({
+				animation: "slide",
 			});
-			<?php endif; ?>
-			
-			<?php if($ql_widgets['slider']): ?>
-			jQuery(function(){
-				//jQuery('#coin-slider').coinslider({width:468, links:false, navigation:false});
-			jQuery("document").ready(function(){
-				mycoin2=jQuery('#coin-slider ul.slides').clone();
-				jQuery('#coin-slider').flexslider({
-				        animation: "slide",
-		      		});
-			});
->>>>>>> c1c43ac0780ad5ad743fee4203992e6359649afe
-			});
+		});
+
+	});
 <?php endif; ?>
 </script>
 </body>
