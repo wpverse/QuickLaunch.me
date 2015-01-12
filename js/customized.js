@@ -65,7 +65,7 @@
 		content = content.replace(/\n/g, '</p><p>');
 		content += '</p>';*/
 		jQuery.ajaxSetup({async:false});
-		jQuery.post("<?php echo get_template_directory_uri(); ?>","postcontent="+content,function(data){
+		jQuery.post("<?php echo get_template_directory_uri(); ?>/echowp.php","postcontent="+content,function(data){
 			content=data;
 		});
 		jQuery.ajaxSetup({async:true});
